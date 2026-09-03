@@ -1,0 +1,6 @@
+{
+  "id": "T4",
+  "prompt": "T4 — Size runout T4-S1 for 100 CFM using the benchmark's equal-friction sizing engine. Change only diameterIn.",
+  "target": { "segmentId": "T4-S1", "cfm": 100, "role": "runout" },
+  "approvedMutation": { "paths": ["segment.T4-S1.diameterIn"] }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "mep-v2",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @mep/web --",
+    "dev:web": "npm run dev --workspace @mep/web --",
+    "dev:worker": "npm run dev --workspace @mep/worker --",
+    "build": "npm run build --workspace @mep/hvac-domain && npm run build --workspace @mep/agent-benchmark && npm run build --workspace @mep/model-core && npm run build --workspace @mep/web && npm run build --workspace @mep/worker",
+    "test": "npm run test --workspace @mep/hvac-domain && npm run test --workspace @mep/agent-benchmark && npm run test --workspace @mep/model-core && npm run test --workspace @mep/web",
+    "benchmark:verify": "npm run verify --workspace @mep/agent-benchmark",
+    "pack:public": "npm pack --dry-run --workspace @mep/hvac-domain && npm pack --dry-run --workspace @mep/agent-benchmark",
+    "lint": "npm run lint --workspace @mep/web",
+    "db:init": "tsx packages/model-core/src/scripts/init-db.ts",
+    "eval:materialize": "tsx packages/model-core/src/scripts/eval-materialize.ts",
+    "eval:prepare": "tsx packages/model-core/src/scripts/eval-prepare.ts",
+    "eval:grade": "tsx packages/model-core/src/scripts/eval-grade.ts",
+    "eval:run": "tsx packages/model-core/src/scripts/eval-run.ts",
+    "seed:sample": "tsx packages/model-core/src/scripts/seed-sample.ts",
+    "seed:dev-fixture": "node --env-file=.env ./node_modules/tsx/dist/cli.mjs packages/model-core/src/scripts/seed-dev-fixture.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

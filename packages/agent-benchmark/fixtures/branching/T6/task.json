@@ -1,0 +1,29 @@
+{
+  "id": "T6",
+  "prompt": "T6 — Restore ROOM-4's second supply run. Add supply terminal D-4B inside ROOM-4 with 100 CFM, add runout RO-4B connecting it to branch BR-2, and set the new runout's diameterIn with the benchmark's equal-friction sizing engine. Preserve every existing item.",
+  "promptVariants": {
+    "finding": "Validation finding: space-cfm — ROOM-4 receives 100 CFM but its design airflow is 200 CFM, and no unused runout stub exists. Resolve it by adding exactly one supply terminal named D-4B inside that room and exactly one new runout named RO-4B connecting it to the branch that already serves the room, with the runout's diameterIn set by the benchmark's equal-friction sizing engine. Preserve every existing item."
+  },
+  "target": {
+    "spaceId": "ROOM-4",
+    "designCfm": 200,
+    "terminalId": "D-4B",
+    "terminalCfm": 100,
+    "segmentId": "RO-4B",
+    "cfm": 100,
+    "role": "runout"
+  },
+  "approvedMutation": {
+    "paths": [
+      "segment.BR-2.connections"
+    ],
+    "additions": {
+      "terminals": [
+        "D-4B"
+      ],
+      "segments": [
+        "RO-4B"
+      ]
+    }
+  }
+}

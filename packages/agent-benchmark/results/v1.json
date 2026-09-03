@@ -1,0 +1,72 @@
+{
+  "benchmarkVersion": "0.1.0",
+  "fixtureSet": "single",
+  "date": "2026-08-03",
+  "agent": {
+    "surface": "Codex isolated subagent",
+    "model": "default model identifier not exposed by the orchestration surface",
+    "reasoningEffort": "medium",
+    "context": "task.json and candidate.json only; no oracle, grader, domain source, repository fixture, or other task access"
+  },
+  "summary": {
+    "passes": 4,
+    "attempts": 5,
+    "passRate": 0.8
+  },
+  "trials": [
+    {
+      "taskId": "T1",
+      "passed": true,
+      "baselineFinding": "space-cfm: ROOM-A received 60 CFM instead of 100 CFM",
+      "finalFindings": [],
+      "warnings": [],
+      "durationSeconds": null,
+      "candidate": "candidates/T1.json",
+      "note": "The first grade exposed an incomplete mutation allowlist: the prompt required connecting the new terminal, but the guard omitted the segment's reciprocal connection field. The guard and oracle were corrected; the original candidate was not changed or retried."
+    },
+    {
+      "taskId": "T2",
+      "passed": true,
+      "baselineFinding": "terminal-in-room: T2-D1 was outside ROOM-B",
+      "finalFindings": [],
+      "warnings": [],
+      "durationSeconds": null,
+      "candidate": "candidates/T2.json"
+    },
+    {
+      "taskId": "T3",
+      "passed": true,
+      "baselineFinding": "connectivity: T3-D1 had no path to supply equipment",
+      "finalFindings": [],
+      "warnings": [],
+      "durationSeconds": null,
+      "candidate": "candidates/T3.json"
+    },
+    {
+      "taskId": "T4",
+      "passed": false,
+      "baselineFinding": "duct-sizing: T4-S1 was 4 inches instead of 7 inches",
+      "finalFindings": [
+        "duct-sizing: T4-S1 was changed to 6 inches but 7 inches is required"
+      ],
+      "warnings": [],
+      "durationSeconds": null,
+      "candidate": "candidates/T4.json"
+    },
+    {
+      "taskId": "T5",
+      "passed": true,
+      "baselineFinding": "terminal-balance: terminal flows were 40/60 CFM instead of 50/50 CFM",
+      "finalFindings": [],
+      "warnings": [],
+      "durationSeconds": null,
+      "candidate": "candidates/T5.json"
+    }
+  ],
+  "limitations": [
+    "One attempt per task on one deliberately small synthetic fixture.",
+    "The orchestration surface did not expose exact model identifiers or per-agent wall-clock durations; those fields are not inferred.",
+    "Warnings are reported but are non-fatal under benchmark version 0.1.0.",
+    "This result is a capability observation, not a reliability, engineering, or code-compliance claim."
+  ]
+}

@@ -1,0 +1,1 @@
+{"errors":[{"severity":"error","check":"terminal-balance","spaceId":"ROOM-E","expectedEach":50,"actual":[40,60]}],"warnings":[],"findings":[{"severity":"error","check":"terminal-balance","spaceId":"ROOM-E","expectedEach":50,"actual":[40,60]}]}

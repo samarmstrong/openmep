@@ -1,0 +1,1 @@
+{"errors":[{"severity":"error","check":"duct-sizing","itemId":"BR-1","expected":9,"actual":6}],"warnings":[],"findings":[{"severity":"error","check":"duct-sizing","itemId":"BR-1","expected":9,"actual":6}]}

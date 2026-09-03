@@ -1,0 +1,22 @@
+{
+  "id": "T5",
+  "prompt": "T5 — Balance ROOM-2. Set both of its supply terminals to equal flow while preserving their 250 CFM total. Change only their cfm values.",
+  "promptVariants": {
+    "finding": "Validation finding: terminal-balance — one room's two supply terminals carry unequal airflow. Fix it by changing only their cfm values so they are equal and still total that room's design airflow."
+  },
+  "target": {
+    "spaceId": "ROOM-2",
+    "terminalIds": [
+      "D-2A",
+      "D-2B"
+    ],
+    "eachCfm": 125,
+    "designCfm": 250
+  },
+  "approvedMutation": {
+    "paths": [
+      "terminal.D-2A.cfm",
+      "terminal.D-2B.cfm"
+    ]
+  }
+}

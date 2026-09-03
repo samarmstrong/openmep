@@ -1,0 +1,6 @@
+{
+  "id": "T3",
+  "prompt": "T3 — Reconnect orphan diffuser T3-D1 to segment T3-S1. Change only its connections.",
+  "target": { "terminalId": "T3-D1" },
+  "approvedMutation": { "paths": ["terminal.T3-D1.connections"] }
+}

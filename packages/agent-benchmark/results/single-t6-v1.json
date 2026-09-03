@@ -1,0 +1,170 @@
+{
+  "benchmarkVersion": "0.4.0",
+  "fixtureSet": "single",
+  "date": "2026-09-01",
+  "agent": {
+    "surface": "claude -p (headless, fresh process per attempt, --no-session-persistence)",
+    "requestedModel": "claude-sonnet-5",
+    "tools": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash"
+    ],
+    "context": "candidate.json plus a trial-local task.json: the explicit form sees prompt, target, and approved mutation; other forms see only id and prompt. A shell wrapper for `mep-benchmark size` is available. No oracle, grader, domain source, repository fixture, or other task access."
+  },
+  "summary": {
+    "passes": 5,
+    "attempts": 6,
+    "passRate": 0.833
+  },
+  "byTask": {
+    "T6": {
+      "passes": 5,
+      "attempts": 6,
+      "meanDurationSeconds": 20.3
+    }
+  },
+  "byPromptForm": {
+    "explicit": {
+      "passes": 2,
+      "attempts": 3,
+      "meanDurationSeconds": 22.8
+    },
+    "finding": {
+      "passes": 3,
+      "attempts": 3,
+      "meanDurationSeconds": 17.7
+    }
+  },
+  "byTaskAndPromptForm": {
+    "T6": {
+      "explicit": {
+        "passes": 2,
+        "attempts": 3,
+        "meanDurationSeconds": 22.8
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 17.7
+      }
+    }
+  },
+  "trials": [
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 13.7,
+      "turns": 5,
+      "costUsd": 0.1084308,
+      "candidate": "single/candidates/T6-explicit-1.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": false,
+      "targetResolved": false,
+      "mutationGuardPassed": false,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "invalidCandidate": "BenchmarkInputError: plan.terminals[1].position must be an array",
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 40.4,
+      "turns": 5,
+      "costUsd": 0.1032798,
+      "candidate": "single/candidates/T6-explicit-2.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 14.4,
+      "turns": 5,
+      "costUsd": 0.10703220000000001,
+      "candidate": "single/candidates/T6-explicit-3.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 18,
+      "turns": 7,
+      "costUsd": 0.15850720000000001,
+      "candidate": "single/candidates/T6-finding-1.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 18.9,
+      "turns": 6,
+      "costUsd": 0.153518,
+      "candidate": "single/candidates/T6-finding-2.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 16.3,
+      "turns": 5,
+      "costUsd": 0.0884584,
+      "candidate": "single/candidates/T6-finding-3.json"
+    }
+  ],
+  "limitations": [
+    "3 attempts per task and prompt form on one synthetic fixture set.",
+    "Model identifiers come from the runner's reported usage; durations are the runner's reported wall clock for the editor process.",
+    "This result is a capability observation, not a reliability, engineering, or code-compliance claim."
+  ]
+}

@@ -1,0 +1,758 @@
+{
+  "benchmarkVersion": "0.4.0",
+  "fixtureSet": "branching",
+  "date": "2026-09-01",
+  "agent": {
+    "surface": "claude -p (headless, fresh process per attempt, --no-session-persistence)",
+    "requestedModel": "claude-haiku-4-5-20251001",
+    "tools": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash"
+    ],
+    "context": "candidate.json plus a trial-local task.json: the explicit form sees prompt, target, and approved mutation; other forms see only id and prompt. A shell wrapper for `mep-benchmark size` is available. No oracle, grader, domain source, repository fixture, or other task access."
+  },
+  "summary": {
+    "passes": 36,
+    "attempts": 36,
+    "passRate": 1
+  },
+  "byTask": {
+    "T1": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 34.6
+    },
+    "T2": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 22.5
+    },
+    "T3": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 21.9
+    },
+    "T4": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 21.8
+    },
+    "T5": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 23
+    },
+    "T6": {
+      "passes": 6,
+      "attempts": 6,
+      "meanDurationSeconds": 30.5
+    }
+  },
+  "byPromptForm": {
+    "explicit": {
+      "passes": 18,
+      "attempts": 18,
+      "meanDurationSeconds": 24.8
+    },
+    "finding": {
+      "passes": 18,
+      "attempts": 18,
+      "meanDurationSeconds": 26.6
+    }
+  },
+  "byTaskAndPromptForm": {
+    "T1": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 34
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 35.1
+      }
+    },
+    "T2": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 22.9
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 22.2
+      }
+    },
+    "T3": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 21
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 22.9
+      }
+    },
+    "T4": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 21.9
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 21.6
+      }
+    },
+    "T5": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 20.4
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 25.6
+      }
+    },
+    "T6": {
+      "explicit": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 28.7
+      },
+      "finding": {
+        "passes": 3,
+        "attempts": 3,
+        "meanDurationSeconds": 32.2
+      }
+    }
+  },
+  "trials": [
+    {
+      "taskId": "T1",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 40.3,
+      "turns": 5,
+      "costUsd": 0.09264889999999999,
+      "candidate": "branching/candidates/T1-explicit-1.json"
+    },
+    {
+      "taskId": "T1",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 35.1,
+      "turns": 5,
+      "costUsd": 0.0860012,
+      "candidate": "branching/candidates/T1-explicit-2.json"
+    },
+    {
+      "taskId": "T1",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 26.6,
+      "turns": 5,
+      "costUsd": 0.2099112,
+      "candidate": "branching/candidates/T1-explicit-3.json"
+    },
+    {
+      "taskId": "T1",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 36.7,
+      "turns": 5,
+      "costUsd": 0.0875822,
+      "candidate": "branching/candidates/T1-finding-1.json"
+    },
+    {
+      "taskId": "T1",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 32.8,
+      "turns": 6,
+      "costUsd": 0.21681140000000002,
+      "candidate": "branching/candidates/T1-finding-2.json"
+    },
+    {
+      "taskId": "T1",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 35.9,
+      "turns": 6,
+      "costUsd": 0.07762840000000001,
+      "candidate": "branching/candidates/T1-finding-3.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 27.5,
+      "turns": 4,
+      "costUsd": 0.0552672,
+      "candidate": "branching/candidates/T2-explicit-1.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 20.8,
+      "turns": 4,
+      "costUsd": 0.14155020000000001,
+      "candidate": "branching/candidates/T2-explicit-2.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 20.3,
+      "turns": 5,
+      "costUsd": 0.06239240000000001,
+      "candidate": "branching/candidates/T2-explicit-3.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 23.5,
+      "turns": 4,
+      "costUsd": 0.0542683,
+      "candidate": "branching/candidates/T2-finding-1.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 22.1,
+      "turns": 4,
+      "costUsd": 0.054462800000000006,
+      "candidate": "branching/candidates/T2-finding-2.json"
+    },
+    {
+      "taskId": "T2",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 20.9,
+      "turns": 5,
+      "costUsd": 0.0641721,
+      "candidate": "branching/candidates/T2-finding-3.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 18,
+      "turns": 4,
+      "costUsd": 0.0490111,
+      "candidate": "branching/candidates/T3-explicit-1.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 24.5,
+      "turns": 4,
+      "costUsd": 0.0539464,
+      "candidate": "branching/candidates/T3-explicit-2.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 20.4,
+      "turns": 5,
+      "costUsd": 0.06095890000000001,
+      "candidate": "branching/candidates/T3-explicit-3.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 23.4,
+      "turns": 4,
+      "costUsd": 0.0547227,
+      "candidate": "branching/candidates/T3-finding-1.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 19.4,
+      "turns": 4,
+      "costUsd": 0.055379199999999996,
+      "candidate": "branching/candidates/T3-finding-2.json"
+    },
+    {
+      "taskId": "T3",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 25.9,
+      "turns": 5,
+      "costUsd": 0.0636018,
+      "candidate": "branching/candidates/T3-finding-3.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 24.8,
+      "turns": 7,
+      "costUsd": 0.0808889,
+      "candidate": "branching/candidates/T4-explicit-1.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 22.5,
+      "turns": 6,
+      "costUsd": 0.06667490000000001,
+      "candidate": "branching/candidates/T4-explicit-2.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 18.5,
+      "turns": 5,
+      "costUsd": 0.0583606,
+      "candidate": "branching/candidates/T4-explicit-3.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 23.2,
+      "turns": 5,
+      "costUsd": 0.061079800000000004,
+      "candidate": "branching/candidates/T4-finding-1.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 18.6,
+      "turns": 6,
+      "costUsd": 0.060107400000000005,
+      "candidate": "branching/candidates/T4-finding-2.json"
+    },
+    {
+      "taskId": "T4",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 23,
+      "turns": 6,
+      "costUsd": 0.0604742,
+      "candidate": "branching/candidates/T4-finding-3.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 22.1,
+      "turns": 5,
+      "costUsd": 0.059611300000000006,
+      "candidate": "branching/candidates/T5-explicit-1.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 23.6,
+      "turns": 4,
+      "costUsd": 0.0544019,
+      "candidate": "branching/candidates/T5-explicit-2.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 15.4,
+      "turns": 4,
+      "costUsd": 0.0473211,
+      "candidate": "branching/candidates/T5-explicit-3.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 22.2,
+      "turns": 6,
+      "costUsd": 0.0709497,
+      "candidate": "branching/candidates/T5-finding-1.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 29.5,
+      "turns": 5,
+      "costUsd": 0.0656833,
+      "candidate": "branching/candidates/T5-finding-2.json"
+    },
+    {
+      "taskId": "T5",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 25,
+      "turns": 6,
+      "costUsd": 0.0741854,
+      "candidate": "branching/candidates/T5-finding-3.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 30.4,
+      "turns": 5,
+      "costUsd": 0.0667044,
+      "candidate": "branching/candidates/T6-explicit-1.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 28.6,
+      "turns": 5,
+      "costUsd": 0.0649372,
+      "candidate": "branching/candidates/T6-explicit-2.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "explicit",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 27.1,
+      "turns": 5,
+      "costUsd": 0.0640829,
+      "candidate": "branching/candidates/T6-explicit-3.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 1,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 32.5,
+      "turns": 5,
+      "costUsd": 0.0679742,
+      "candidate": "branching/candidates/T6-finding-1.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 2,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 34.4,
+      "turns": 5,
+      "costUsd": 0.0699763,
+      "candidate": "branching/candidates/T6-finding-2.json"
+    },
+    {
+      "taskId": "T6",
+      "promptForm": "finding",
+      "attempt": 3,
+      "passed": true,
+      "targetResolved": true,
+      "mutationGuardPassed": true,
+      "mutationGuardViolations": [],
+      "finalFindings": [],
+      "models": [
+        "claude-haiku-4-5-20251001"
+      ],
+      "durationSeconds": 29.8,
+      "turns": 5,
+      "costUsd": 0.06572040000000001,
+      "candidate": "branching/candidates/T6-finding-3.json"
+    }
+  ],
+  "limitations": [
+    "3 attempts per task and prompt form on one synthetic fixture set.",
+    "Model identifiers come from the runner's reported usage; durations are the runner's reported wall clock for the editor process.",
+    "This result is a capability observation, not a reliability, engineering, or code-compliance claim."
+  ]
+}

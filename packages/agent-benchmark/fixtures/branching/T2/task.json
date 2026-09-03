@@ -1,0 +1,16 @@
+{
+  "id": "T2",
+  "prompt": "T2 — Move diffuser D-3A into its declared room ROOM-3. Change only its position.",
+  "promptVariants": {
+    "finding": "Validation finding: terminal-in-room — one supply terminal lies outside the room it is assigned to. Fix it by changing only that terminal's position."
+  },
+  "target": {
+    "terminalId": "D-3A",
+    "spaceId": "ROOM-3"
+  },
+  "approvedMutation": {
+    "paths": [
+      "terminal.D-3A.position"
+    ]
+  }
+}

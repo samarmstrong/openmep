@@ -1,0 +1,27 @@
+{
+  "id": "T6",
+  "prompt": "T6 — Restore Room F supply with a new sized run. Add supply terminal T6-D2 inside Room F with 60 CFM, add runout T6-S2 connecting it to AHU-1, and set the new runout's diameterIn with the benchmark's equal-friction sizing engine. Preserve every existing item.",
+  "promptVariants": {
+    "finding": "Validation finding: space-cfm — ROOM-F receives 40 CFM but its design airflow is 100 CFM, and no unused runout stub exists. Resolve it by adding exactly one supply terminal named T6-D2 inside that room and exactly one new runout named T6-S2 connecting it to the supply equipment, with diameterIn set by the benchmark's equal-friction sizing engine. Preserve every existing item."
+  },
+  "target": {
+    "spaceId": "ROOM-F",
+    "designCfm": 100,
+    "terminalId": "T6-D2",
+    "terminalCfm": 60,
+    "segmentId": "T6-S2",
+    "cfm": 60,
+    "role": "runout"
+  },
+  "approvedMutation": {
+    "paths": [],
+    "additions": {
+      "terminals": [
+        "T6-D2"
+      ],
+      "segments": [
+        "T6-S2"
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "T5",
+  "prompt": "T5 — Balance Room E. Set both supply terminals to equal flow while preserving their 100 CFM total. Change only their cfm values.",
+  "target": { "spaceId": "ROOM-E", "terminalIds": ["T5-D1", "T5-D2"], "eachCfm": 50, "designCfm": 100 },
+  "approvedMutation": { "paths": ["terminal.T5-D1.cfm", "terminal.T5-D2.cfm"] }
+}

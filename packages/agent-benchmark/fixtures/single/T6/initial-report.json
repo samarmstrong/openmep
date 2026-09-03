@@ -1,0 +1,1 @@
+{"errors":[{"severity":"error","check":"space-cfm","spaceId":"ROOM-F","expected":100,"actual":40}],"warnings":[],"findings":[{"severity":"error","check":"space-cfm","spaceId":"ROOM-F","expected":100,"actual":40}]}

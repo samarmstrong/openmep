@@ -1,0 +1,17 @@
+{
+  "id": "T4",
+  "prompt": "T4 — Size branch BR-1 for the 250 CFM it carries using the benchmark's equal-friction sizing engine. Change only diameterIn.",
+  "promptVariants": {
+    "finding": "Validation finding: duct-sizing — one supply branch is undersized for the airflow it carries to its downstream terminals. Fix it by changing only that segment's diameterIn, sized with the benchmark's equal-friction sizing engine."
+  },
+  "target": {
+    "segmentId": "BR-1",
+    "cfm": 250,
+    "role": "branch"
+  },
+  "approvedMutation": {
+    "paths": [
+      "segment.BR-1.diameterIn"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"version":1,"spaces":[{"id":"ROOM-B","bounds":[0,0,10,10],"designCfm":100}],"equipment":[{"id":"AHU-1","kind":"ahu"}],"terminals":[{"id":"T2-D1","spaceId":"ROOM-B","position":[15,5],"cfm":100,"connections":["T2-S1"]}],"segments":[{"id":"T2-S1","diameterIn":8,"connections":["T2-D1","AHU-1"]}]}

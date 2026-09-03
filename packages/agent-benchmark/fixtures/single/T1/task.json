@@ -1,0 +1,6 @@
+{
+  "id": "T1",
+  "prompt": "T1 — Restore Room A supply. Add supply terminal T1-D2 inside Room A with 40 CFM and connect it to T1-S1 so the room receives its 100 CFM design airflow. Preserve every existing item.",
+  "target": { "spaceId": "ROOM-A", "designCfm": 100 },
+  "approvedMutation": { "paths": ["segment.T1-S1.connections"], "additions": { "terminals": ["T1-D2"] } }
+}

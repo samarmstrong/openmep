@@ -1,0 +1,21 @@
+{
+  "id": "T1",
+  "prompt": "T1 — Restore ROOM-4 supply. Add supply terminal D-4B inside ROOM-4 with 100 CFM and connect it to runout RO-4B so the room receives its 200 CFM design airflow. Preserve every existing item.",
+  "promptVariants": {
+    "finding": "Validation finding: space-cfm — ROOM-4 receives 100 CFM but its design airflow is 200 CFM. Resolve it by adding exactly one supply terminal, named D-4B, inside that room and connecting it to the existing runout stub that currently serves no terminal. Preserve every existing item."
+  },
+  "target": {
+    "spaceId": "ROOM-4",
+    "designCfm": 200
+  },
+  "approvedMutation": {
+    "paths": [
+      "segment.RO-4B.connections"
+    ],
+    "additions": {
+      "terminals": [
+        "D-4B"
+      ]
+    }
+  }
+}

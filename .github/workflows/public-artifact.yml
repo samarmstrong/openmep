@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Use Node.js 24 LTS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache public IFC fixtures
+        uses: actions/cache@v4
+        with:
+          path: fixtures/public
+          key: public-ifc-${{ hashFiles('fixtures/fetch-public-ifc.sh') }}
+
+      - name: Fetch public IFC fixtures
+        run: fixtures/fetch-public-ifc.sh duplex wbdg_office
+
+      - name: Build public packages
+        run: |
+          npm run build --workspace @mep/hvac-domain
+          npm run build --workspace @mep/agent-benchmark
+
+      - name: Test public packages
+        run: |
+          npm run test --workspace @mep/hvac-domain
+          npm run test --workspace @mep/agent-benchmark
+
+      - name: Build full workspace
+        run: npm run build
+
+      - name: Test full workspace
+        run: npm test
+
+      - name: Verify benchmark
+        run: npm run benchmark:verify
+
+      - name: Inspect package contents
+        run: |
+          npm pack --dry-run --workspace @mep/hvac-domain
+          npm pack --dry-run --workspace @mep/agent-benchmark

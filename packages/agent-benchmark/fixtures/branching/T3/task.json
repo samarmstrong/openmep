@@ -1,0 +1,15 @@
+{
+  "id": "T3",
+  "prompt": "T3 — Reconnect orphan diffuser D-2B to runout RO-2B. Change only its connections.",
+  "promptVariants": {
+    "finding": "Validation finding: connectivity — one supply terminal has no duct path to supply equipment. Fix it by changing only that terminal's connections."
+  },
+  "target": {
+    "terminalId": "D-2B"
+  },
+  "approvedMutation": {
+    "paths": [
+      "terminal.D-2B.connections"
+    ]
+  }
+}

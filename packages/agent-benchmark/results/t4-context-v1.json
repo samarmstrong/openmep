@@ -1,0 +1,386 @@
+{
+  "benchmarkVersion": "0.2.0",
+  "experiment": "t4-sizing-context",
+  "fixtureSet": "single",
+  "task": "T4",
+  "oracleDiameterIn": 7,
+  "date": "2026-08-28",
+  "agent": {
+    "surface": "claude -p (headless, fresh process per attempt, --no-session-persistence)",
+    "requestedModel": "claude-sonnet-5",
+    "context": "task.json and candidate.json only, plus the variant context in the prompt; no oracle, grader, domain source, repository fixture, or other task access"
+  },
+  "summary": {
+    "passes": 11,
+    "attempts": 15,
+    "passRate": 0.733
+  },
+  "variants": {
+    "V0-control": {
+      "description": "Original task prompt only (replicates the v0.1.0 condition).",
+      "tools": [
+        "Read",
+        "Edit",
+        "Write"
+      ],
+      "passes": 1,
+      "attempts": 3,
+      "chosenDiametersIn": [
+        7,
+        6,
+        6
+      ],
+      "meanDurationSeconds": 20.9
+    },
+    "V1-parameters": {
+      "description": "Prompt plus friction rate, formulas, velocity cap, and standard sizes; no selection rule.",
+      "tools": [
+        "Read",
+        "Edit",
+        "Write"
+      ],
+      "passes": 1,
+      "attempts": 3,
+      "chosenDiametersIn": [
+        6,
+        7,
+        6
+      ],
+      "meanDurationSeconds": 24.7
+    },
+    "V2-parameters-rule": {
+      "description": "V1 plus the explicit next-standard-size selection rule.",
+      "tools": [
+        "Read",
+        "Edit",
+        "Write"
+      ],
+      "passes": 3,
+      "attempts": 3,
+      "chosenDiametersIn": [
+        7,
+        7,
+        7
+      ],
+      "meanDurationSeconds": 27.2
+    },
+    "V3-api-hint": {
+      "description": "Prompt plus the engine's public TypeScript API and defaults; no formulas.",
+      "tools": [
+        "Read",
+        "Edit",
+        "Write"
+      ],
+      "passes": 3,
+      "attempts": 3,
+      "chosenDiametersIn": [
+        7,
+        7,
+        7
+      ],
+      "meanDurationSeconds": 57.2
+    },
+    "V4-tool": {
+      "description": "Prompt plus a shell wrapper around `mep-benchmark size`; the editor may run it.",
+      "tools": [
+        "Read",
+        "Edit",
+        "Write",
+        "Bash"
+      ],
+      "passes": 3,
+      "attempts": 3,
+      "chosenDiametersIn": [
+        7,
+        7,
+        7
+      ],
+      "meanDurationSeconds": 14.7
+    }
+  },
+  "trials": [
+    {
+      "variant": "V0-control",
+      "attempt": 1,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 15.7,
+      "wallSeconds": 16.8,
+      "turns": 4,
+      "costUsd": 0.10548840000000001,
+      "candidate": "t4-context/candidates/V0-control-1.json"
+    },
+    {
+      "variant": "V0-control",
+      "attempt": 2,
+      "taskId": "T4",
+      "passed": false,
+      "chosenDiameterIn": 6,
+      "finalFindings": [
+        "duct-sizing: T4-S1 expected 7 actual 6"
+      ],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 27.8,
+      "wallSeconds": 28.8,
+      "turns": 4,
+      "costUsd": 0.120051,
+      "candidate": "t4-context/candidates/V0-control-2.json"
+    },
+    {
+      "variant": "V0-control",
+      "attempt": 3,
+      "taskId": "T4",
+      "passed": false,
+      "chosenDiameterIn": 6,
+      "finalFindings": [
+        "duct-sizing: T4-S1 expected 7 actual 6"
+      ],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 19.2,
+      "wallSeconds": 20.3,
+      "turns": 4,
+      "costUsd": 0.111038,
+      "candidate": "t4-context/candidates/V0-control-3.json"
+    },
+    {
+      "variant": "V1-parameters",
+      "attempt": 1,
+      "taskId": "T4",
+      "passed": false,
+      "chosenDiameterIn": 6,
+      "finalFindings": [
+        "duct-sizing: T4-S1 expected 7 actual 6"
+      ],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 22.9,
+      "wallSeconds": 24,
+      "turns": 4,
+      "costUsd": 0.12078040000000001,
+      "candidate": "t4-context/candidates/V1-parameters-1.json"
+    },
+    {
+      "variant": "V1-parameters",
+      "attempt": 2,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 20.4,
+      "wallSeconds": 21.5,
+      "turns": 4,
+      "costUsd": 0.1153498,
+      "candidate": "t4-context/candidates/V1-parameters-2.json"
+    },
+    {
+      "variant": "V1-parameters",
+      "attempt": 3,
+      "taskId": "T4",
+      "passed": false,
+      "chosenDiameterIn": 6,
+      "finalFindings": [
+        "duct-sizing: T4-S1 expected 7 actual 6"
+      ],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 30.7,
+      "wallSeconds": 31.6,
+      "turns": 4,
+      "costUsd": 0.1289198,
+      "candidate": "t4-context/candidates/V1-parameters-3.json"
+    },
+    {
+      "variant": "V2-parameters-rule",
+      "attempt": 1,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 31.6,
+      "wallSeconds": 32.5,
+      "turns": 4,
+      "costUsd": 0.1345534,
+      "candidate": "t4-context/candidates/V2-parameters-rule-1.json"
+    },
+    {
+      "variant": "V2-parameters-rule",
+      "attempt": 2,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 24.3,
+      "wallSeconds": 25.2,
+      "turns": 4,
+      "costUsd": 0.1263062,
+      "candidate": "t4-context/candidates/V2-parameters-rule-2.json"
+    },
+    {
+      "variant": "V2-parameters-rule",
+      "attempt": 3,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 25.7,
+      "wallSeconds": 26.6,
+      "turns": 4,
+      "costUsd": 0.1312214,
+      "candidate": "t4-context/candidates/V2-parameters-rule-3.json"
+    },
+    {
+      "variant": "V3-api-hint",
+      "attempt": 1,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 72.8,
+      "wallSeconds": 73.7,
+      "turns": 4,
+      "costUsd": 0.1880946,
+      "candidate": "t4-context/candidates/V3-api-hint-1.json"
+    },
+    {
+      "variant": "V3-api-hint",
+      "attempt": 2,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 40,
+      "wallSeconds": 40.9,
+      "turns": 4,
+      "costUsd": 0.1440372,
+      "candidate": "t4-context/candidates/V3-api-hint-2.json"
+    },
+    {
+      "variant": "V3-api-hint",
+      "attempt": 3,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 58.7,
+      "wallSeconds": 59.6,
+      "turns": 4,
+      "costUsd": 0.1708662,
+      "candidate": "t4-context/candidates/V3-api-hint-3.json"
+    },
+    {
+      "variant": "V4-tool",
+      "attempt": 1,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 14.9,
+      "wallSeconds": 15.9,
+      "turns": 5,
+      "costUsd": 0.5599822,
+      "candidate": "t4-context/candidates/V4-tool-1.json"
+    },
+    {
+      "variant": "V4-tool",
+      "attempt": 2,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 15.6,
+      "wallSeconds": 16.5,
+      "turns": 4,
+      "costUsd": 0.4590898,
+      "candidate": "t4-context/candidates/V4-tool-2.json"
+    },
+    {
+      "variant": "V4-tool",
+      "attempt": 3,
+      "taskId": "T4",
+      "passed": true,
+      "chosenDiameterIn": 7,
+      "finalFindings": [],
+      "mutationGuardPassed": true,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "durationSeconds": 13.5,
+      "wallSeconds": 14.7,
+      "turns": 4,
+      "costUsd": 0.145376,
+      "candidate": "t4-context/candidates/V4-tool-3.json"
+    }
+  ],
+  "limitations": [
+    "3 attempts per variant on one deliberately small synthetic fixture.",
+    "Model identifiers come from the runner's reported usage; durations are the runner's reported wall clock for the editor process.",
+    "This result is a capability observation about context, not a reliability, engineering, or code-compliance claim."
+  ]
+}

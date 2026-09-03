@@ -1,0 +1,6 @@
+{
+  "id": "T2",
+  "prompt": "T2 — Move T2-D1 into its declared Room B rectangle. Preserve every other value.",
+  "target": { "terminalId": "T2-D1", "spaceId": "ROOM-B" },
+  "approvedMutation": { "paths": ["terminal.T2-D1.position"] }
+}
