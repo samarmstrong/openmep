@@ -9,7 +9,7 @@ import type {
   PlanSpace,
   PlanStorey,
   SpaceLoad
-} from "@mep/model-core";
+} from "@openmep/model-core";
 import type { PointerEventHandler, WheelEventHandler } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 

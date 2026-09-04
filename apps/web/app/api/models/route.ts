@@ -1,4 +1,4 @@
-import { createUploadModel, listModels } from "@mep/model-core/server";
+import { createUploadModel, listModels } from "@openmep/model-core/server";
 
 import { errorResponse, json } from "@/lib/http";
 

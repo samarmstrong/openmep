@@ -1,4 +1,4 @@
-import { getStorageAdapter } from "@mep/model-core/server";
+import { getStorageAdapter } from "@openmep/model-core/server";
 
 import { errorResponse } from "@/lib/http";
 

@@ -1,4 +1,4 @@
-import { getModelSummary, queryElements, queryRequestSchema } from "@mep/model-core/server";
+import { getModelSummary, queryElements, queryRequestSchema } from "@openmep/model-core/server";
 import { ZodError } from "zod";
 
 import { errorResponse, json } from "@/lib/http";

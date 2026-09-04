@@ -1,4 +1,4 @@
-import { DuctSizingError, sizeDuctForAirflow } from "@mep/hvac-domain";
+import { DuctSizingError, sizeDuctForAirflow } from "@openmep/hvac-domain";
 import { BenchmarkInputError } from "./schema.js";
 
 /** The benchmark's sizing oracle, exposed so agents can call the same engine the grader uses. */

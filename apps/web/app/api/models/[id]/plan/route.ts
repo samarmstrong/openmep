@@ -2,7 +2,7 @@ import {
   getModelSummary,
   getPlanStorey,
   regeneratePlanModel
-} from "@mep/model-core/server";
+} from "@openmep/model-core/server";
 
 import { errorResponse, json } from "@/lib/http";
 

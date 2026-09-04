@@ -6,7 +6,7 @@ const { getModelSummary, getPlanStorey, regeneratePlanModel } = vi.hoisted(() =>
   regeneratePlanModel: vi.fn()
 }));
 
-vi.mock("@mep/model-core/server", () => ({
+vi.mock("@openmep/model-core/server", () => ({
   getModelSummary,
   getPlanStorey,
   regeneratePlanModel

@@ -53,5 +53,5 @@ export const TASK_IDS: readonly BenchmarkTaskId[];
 export function fixtureSets(root?: string): string[];
 export function verifyFixtures(root?: string): { passed: true; files: string[] };
 export function verifyRecordedResults(root?: string): { passed: true; files: string[] };
-export type { RoundDuctSize } from "@mep/hvac-domain";
-export function sizeSegment(input: { cfm: number; airflowType: import("@mep/hvac-domain").AirflowType; role: import("@mep/hvac-domain").DuctRole }): import("@mep/hvac-domain").RoundDuctSize;
+export type { RoundDuctSize } from "@openmep/hvac-domain";
+export function sizeSegment(input: { cfm: number; airflowType: import("@openmep/hvac-domain").AirflowType; role: import("@openmep/hvac-domain").DuctRole }): import("@openmep/hvac-domain").RoundDuctSize;

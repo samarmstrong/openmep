@@ -1,4 +1,4 @@
-import { getElementDetail, getModelSummary } from "@mep/model-core/server";
+import { getElementDetail, getModelSummary } from "@openmep/model-core/server";
 
 import { errorResponse, json } from "@/lib/http";
 

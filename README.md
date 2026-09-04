@@ -14,8 +14,8 @@ edit it without breaking it.
 
 | Workspace | What it does |
 |---|---|
-| `packages/hvac-domain` (`@mep/hvac-domain`) | Dependency-free equal-friction round-duct sizing and supply-network CFM propagation. |
-| `packages/agent-benchmark` (`@mep/agent-benchmark`) | Synthetic T1–T6 mechanical-plan editing benchmark (single + branching fixture sets), deterministic grader, `mep-benchmark` CLI (`grade`, `verify`, `size`), recorded results. |
+| `packages/hvac-domain` (`@openmep/hvac-domain`) | Dependency-free equal-friction round-duct sizing and supply-network CFM propagation. |
+| `packages/agent-benchmark` (`@openmep/agent-benchmark`) | Synthetic T1–T6 mechanical-plan editing benchmark (single + branching fixture sets), deterministic grader, `mep-benchmark` CLI (`grade`, `verify`, `size`), recorded results. |
 | `packages/model-core` | IFC ingestion (web-ifc): storeys, spaces, elements, space boundaries, geometric envelope recovery; 2D plan extraction (Clipper2 footprints); design-day cooling/heating loads (ASHRAE 62.1 ventilation, 90.1 assemblies); mechanical plan layers with CFM-grounded terminals and inferred duct connectivity; plan validator; headless eval runner. |
 | `apps/web` | Next.js 16 viewer: 3D (That Open / Three.js) and storey-driven 2D plan mode with the load dashboard. |
 | `apps/worker` | `pg-boss` worker that converts IFC to Fragments and writes the model index. |
@@ -30,7 +30,7 @@ exporter quirks the pipeline handles. No IFC is committed to this repository.
 ```sh
 npm install
 fixtures/fetch-public-ifc.sh            # duplex + wbdg_office (~55 MB)
-npm run build --workspace @mep/hvac-domain --workspace @mep/agent-benchmark
+npm run build --workspace @openmep/hvac-domain --workspace @openmep/agent-benchmark
 npm test
 ```
 

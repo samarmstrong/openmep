@@ -14,8 +14,7 @@ const spaceTypeEntrySchema = z.object({
   peopleLatentBtuhPerPerson: z.number().nonnegative(),
   exhaustCfmPerSqft: z.number().nonnegative(),
   exhaustCfmPerUnit: z.number().nonnegative(),
-  cfmPerSqftEstimator: z.number().nonnegative(),
-  sourceRow: z.number().int().positive()
+  cfmPerSqftEstimator: z.number().nonnegative()
 });
 
 export type SpaceTypeEntry = z.infer<typeof spaceTypeEntrySchema>;
@@ -23,7 +22,6 @@ export type SpaceTypeEntry = z.infer<typeof spaceTypeEntrySchema>;
 const spaceTypesFileSchema = z.object({
   source: z.string(),
   note: z.string(),
-  extractedFrom: z.string(),
   entryCount: z.number().int().nonnegative(),
   entries: z.array(spaceTypeEntrySchema).min(1)
 });

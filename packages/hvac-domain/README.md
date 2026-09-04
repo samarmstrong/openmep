@@ -1,9 +1,9 @@
-# @mep/hvac-domain
+# @openmep/hvac-domain
 
 Deterministic, dependency-free ESM primitives for equal-friction round-duct sizing and supply-air network propagation.
 
 ```ts
-import { recommendSupplyDuctSegments } from "@mep/hvac-domain";
+import { recommendSupplyDuctSegments } from "@openmep/hvac-domain";
 
 const result = recommendSupplyDuctSegments(items);
 ```
@@ -39,8 +39,8 @@ Use the output as a transparent preliminary sizing primitive; validate final des
 ## Development
 
 ```sh
-npm run build --workspace @mep/hvac-domain
-npm run test --workspace @mep/hvac-domain
+npm run build --workspace @openmep/hvac-domain
+npm run test --workspace @openmep/hvac-domain
 ```
 
 MIT licensed. See [CONTRIBUTING.md](./CONTRIBUTING.md) and [SECURITY.md](./SECURITY.md).

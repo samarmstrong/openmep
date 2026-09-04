@@ -1,5 +1,5 @@
 {
-  "name": "@mep/agent-benchmark",
+  "name": "@openmep/agent-benchmark",
   "version": "0.4.0",
   "description": "Deterministic, synthetic benchmark for HVAC plan-editing agents.",
   "license": "MIT",
@@ -26,7 +26,7 @@
   },
   "keywords": ["mep", "hvac", "benchmark", "agents", "evaluation"],
   "dependencies": {
-    "@mep/hvac-domain": "0.1.0"
+    "@openmep/hvac-domain": "0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

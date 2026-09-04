@@ -1,19 +1,19 @@
 {
-  "name": "mep-v2",
+  "name": "openmep",
   "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace @mep/web --",
-    "dev:web": "npm run dev --workspace @mep/web --",
-    "dev:worker": "npm run dev --workspace @mep/worker --",
-    "build": "npm run build --workspace @mep/hvac-domain && npm run build --workspace @mep/agent-benchmark && npm run build --workspace @mep/model-core && npm run build --workspace @mep/web && npm run build --workspace @mep/worker",
-    "test": "npm run test --workspace @mep/hvac-domain && npm run test --workspace @mep/agent-benchmark && npm run test --workspace @mep/model-core && npm run test --workspace @mep/web",
-    "benchmark:verify": "npm run verify --workspace @mep/agent-benchmark",
-    "pack:public": "npm pack --dry-run --workspace @mep/hvac-domain && npm pack --dry-run --workspace @mep/agent-benchmark",
-    "lint": "npm run lint --workspace @mep/web",
+    "dev": "npm run dev --workspace @openmep/web --",
+    "dev:web": "npm run dev --workspace @openmep/web --",
+    "dev:worker": "npm run dev --workspace @openmep/worker --",
+    "build": "npm run build --workspace @openmep/hvac-domain && npm run build --workspace @openmep/agent-benchmark && npm run build --workspace @openmep/model-core && npm run build --workspace @openmep/web && npm run build --workspace @openmep/worker",
+    "test": "npm run test --workspace @openmep/hvac-domain && npm run test --workspace @openmep/agent-benchmark && npm run test --workspace @openmep/model-core && npm run test --workspace @openmep/web",
+    "benchmark:verify": "npm run verify --workspace @openmep/agent-benchmark",
+    "pack:public": "npm pack --dry-run --workspace @openmep/hvac-domain && npm pack --dry-run --workspace @openmep/agent-benchmark",
+    "lint": "npm run lint --workspace @openmep/web",
     "db:init": "tsx packages/model-core/src/scripts/init-db.ts",
     "eval:materialize": "tsx packages/model-core/src/scripts/eval-materialize.ts",
     "eval:prepare": "tsx packages/model-core/src/scripts/eval-prepare.ts",

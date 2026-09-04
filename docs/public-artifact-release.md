@@ -2,7 +2,7 @@
 
 The repository is open source under the MIT license (root `LICENSE`). Two
 workspaces are additionally packaged for npm as independent ESM packages,
-`@mep/hvac-domain` and `@mep/agent-benchmark`; each carries its own copy of the
+`@openmep/hvac-domain` and `@openmep/agent-benchmark`; each carries its own copy of the
 MIT license so the published archives are self-contained.
 
 ## License boundary
@@ -16,8 +16,8 @@ Before a release, inspect both package archives and confirm that each contains
 its own MIT license and no fixture data:
 
 ```sh
-npm pack --dry-run --workspace @mep/hvac-domain
-npm pack --dry-run --workspace @mep/agent-benchmark
+npm pack --dry-run --workspace @openmep/hvac-domain
+npm pack --dry-run --workspace @openmep/agent-benchmark
 ```
 
 ## Data and provenance boundary
@@ -74,15 +74,15 @@ Use Node.js 24 LTS and npm. The committed npm lockfile is authoritative.
 
 ```sh
 npm ci
-npm run build --workspace @mep/hvac-domain
-npm run test --workspace @mep/hvac-domain
-npm run build --workspace @mep/agent-benchmark
-npm run test --workspace @mep/agent-benchmark
+npm run build --workspace @openmep/hvac-domain
+npm run test --workspace @openmep/hvac-domain
+npm run build --workspace @openmep/agent-benchmark
+npm run test --workspace @openmep/agent-benchmark
 npm run build
 npm test
 npm run benchmark:verify
-npm pack --dry-run --workspace @mep/hvac-domain
-npm pack --dry-run --workspace @mep/agent-benchmark
+npm pack --dry-run --workspace @openmep/hvac-domain
+npm pack --dry-run --workspace @openmep/agent-benchmark
 ```
 
 Review the dry-run file lists for unexpected application code, credentials,
@@ -94,8 +94,8 @@ checks on pull requests and pushes to `main`.
 From a clean, reviewed commit, create local npm-compatible archives:
 
 ```sh
-npm pack --workspace @mep/hvac-domain
-npm pack --workspace @mep/agent-benchmark
+npm pack --workspace @openmep/hvac-domain
+npm pack --workspace @openmep/agent-benchmark
 shasum -a 256 mep-hvac-domain-*.tgz mep-agent-benchmark-*.tgz > SHA256SUMS
 ```
 

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import type { PlanStorey, StoreySummary } from "@mep/model-core";
+import type { PlanStorey, StoreySummary } from "@openmep/model-core";
 import React from "react";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";

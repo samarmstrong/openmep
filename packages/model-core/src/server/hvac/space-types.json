@@ -1,7 +1,6 @@
 {
-  "source": "Load Manager v2506.xlsm / LookupTable",
-  "note": "ASHRAE 62.1-2019 Ventilation Rate Procedure values plus a calibrated quick-sizing CFM/sqft estimator (workbook column M). ra = CFM per sqft, rp = CFM per person, cfmPerSqftEstimator = total CFM per sqft from engineer's rule-of-thumb tabulation.",
-  "extractedFrom": "Load Manager v2506.xlsm",
+  "source": "ASHRAE 62.1-2019 Table 6-1 (Ra, Rp, default occupant density) and Table 6-2 (exhaust); lighting power densities per ASHRAE 90.1 space-by-space method; occupant sensible/latent heat gains per ASHRAE Fundamentals Ch. 18",
+  "note": "Transcribed from a practitioner lookup table and spot-checked against the standards (e.g. office 0.06/5/5, veterinary exam room 0.12/10/20); values are not independently re-verified row by row. cfmPerSqftEstimator is 0 for every entry: the original rule-of-thumb calibration column was proprietary and has been removed, so designCfm derives from ventilation, thermal and exhaust terms only.",
   "entryCount": 155,
   "entries": [
     {
@@ -16,8 +15,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 213
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-imaging-mri-ct-pet",
@@ -31,8 +29,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.9,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 214
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-operating-rooms",
@@ -46,8 +43,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 3.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 215
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-postoperative-recovery-room",
@@ -61,8 +57,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 216
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-preparation-rooms",
@@ -76,8 +71,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 217
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-procedure-room",
@@ -91,8 +85,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 2.25,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 218
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "animal-surgery-scrub",
@@ -106,8 +99,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 219
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "large-animal-holding-room",
@@ -121,8 +113,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 2.25,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 220
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "necropsy",
@@ -136,8 +127,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 2.25,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 221
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "small-animal-cage-room-static-cages",
@@ -151,8 +141,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 2.25,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 222
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "small-animal-cage-room-ventilated-cages",
@@ -166,8 +155,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 223
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "booking-waiting",
@@ -181,8 +169,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 226
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "cell-with-toilet",
@@ -196,8 +183,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 1.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 227
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "cell",
@@ -211,8 +197,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 228
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "day-room",
@@ -226,8 +211,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 229
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "guard-stations",
@@ -241,8 +225,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 230
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "art-classroom",
@@ -256,8 +239,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.7,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 233
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "classrooms-ages-5-to-8",
@@ -271,8 +253,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 234
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "classrooms-ages-9-and-up",
@@ -286,8 +267,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 235
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "computer-lab",
@@ -301,8 +281,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 236
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "daycare-sickroom",
@@ -316,8 +295,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 237
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "daycare-through-age-4",
@@ -331,8 +309,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 238
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "lecture-classroom",
@@ -346,8 +323,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 239
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "lecture-hall-fixed-seats",
@@ -361,8 +337,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 241
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "libraries",
@@ -376,8 +351,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 242
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "media-center",
@@ -391,8 +365,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 243
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "multi-use-assembly",
@@ -406,8 +379,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 244
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "music-theater-dance",
@@ -421,8 +393,7 @@
       "peopleLatentBtuhPerPerson": 545.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 245
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "science-laboratories",
@@ -436,8 +407,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 1.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 246
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "university-college-laboraties",
@@ -451,8 +421,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 247
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "wood-metal-shop",
@@ -466,8 +435,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 248
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "bars-cocktail-lounges",
@@ -481,8 +449,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 251
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "cafeteria-fast-food",
@@ -496,8 +463,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 252
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "kitchens-cooking",
@@ -511,8 +477,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.7,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.5,
-      "sourceRow": 253
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "restaurant-dining-rooms",
@@ -526,8 +491,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 254
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "breakrooms",
@@ -541,8 +505,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 257
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "coffee-stations",
@@ -556,8 +519,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 258
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "conference-meeting",
@@ -571,8 +533,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 259
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "corridors",
@@ -586,8 +547,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.5,
-      "sourceRow": 260
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "occupiable-storage-rooms-for-liquids-or-gels",
@@ -601,8 +561,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.5,
-      "sourceRow": 261
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "locker-rooms-athletic-industrial-health-care",
@@ -616,8 +575,7 @@
       "peopleLatentBtuhPerPerson": 545.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 262
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "locker-and-dressing-rooms-other",
@@ -631,8 +589,7 @@
       "peopleLatentBtuhPerPerson": 475.0,
       "exhaustCfmPerSqft": 0.25,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 263
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "toilets-public-light",
@@ -646,8 +603,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 50.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 264
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "toilets-public-heavy",
@@ -661,8 +617,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 70.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 265
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "toilet-private-continuous",
@@ -676,8 +631,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 25.0,
-      "cfmPerSqftEstimator": 0.4,
-      "sourceRow": 266
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "toilet-private-intermittent",
@@ -691,8 +645,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 50.0,
-      "cfmPerSqftEstimator": 0.4,
-      "sourceRow": 267
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "shower-rooms-intermitent",
@@ -706,8 +659,7 @@
       "peopleLatentBtuhPerPerson": 1090.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 50.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 268
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "shower-rooms-continuous",
@@ -721,8 +673,7 @@
       "peopleLatentBtuhPerPerson": 1090.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 20.0,
-      "cfmPerSqftEstimator": 0.6,
-      "sourceRow": 269
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "janitor-trash-recycle",
@@ -736,8 +687,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 1.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 270
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "barracks-dormitory-sleeping-areas",
@@ -751,8 +701,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 273
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "bedroom-living-room",
@@ -766,8 +715,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 274
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "laundry-rooms-central",
@@ -781,8 +729,7 @@
       "peopleLatentBtuhPerPerson": 870.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 8.0,
-      "sourceRow": 275
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "laundry-rooms-within-dwelling-units",
@@ -796,8 +743,7 @@
       "peopleLatentBtuhPerPerson": 475.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 8.0,
-      "sourceRow": 276
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "lobbies-prefunction",
@@ -811,8 +757,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 277
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "hotel-lobbies",
@@ -826,8 +771,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 278
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "elevator-lobbies",
@@ -841,8 +785,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.8,
-      "sourceRow": 279
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "multi-purpose-assembly-ballroom",
@@ -856,8 +799,7 @@
       "peopleLatentBtuhPerPerson": 275.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 280
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "conference-rooms-hotel",
@@ -871,8 +813,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 281
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "kitchenettes",
@@ -886,8 +827,7 @@
       "peopleLatentBtuhPerPerson": 475.0,
       "exhaustCfmPerSqft": 0.3,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.8,
-      "sourceRow": 282
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "soiled-laundry-storage-rooms",
@@ -901,8 +841,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 1.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 283
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "banks-or-bank-lobbies",
@@ -916,8 +855,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 286
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "bank-vaults-safe-deposit",
@@ -931,8 +869,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 287
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "computer-not-printing",
@@ -946,8 +883,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.6,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 288
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "freezer-and-refrigerated-spaces-50-f",
@@ -961,8 +897,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 289
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "manufacturing-where-hazardous-materials-are-not-used",
@@ -976,8 +911,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 290
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "manufacturing-where-hazardous-materials-are-used-excludes-heavy-industrial-and-chemical-processes",
@@ -991,8 +925,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 291
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "pharmacy-prep-area",
@@ -1006,8 +939,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 292
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "photo-studios",
@@ -1021,8 +953,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 293
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "shipping-receiving",
@@ -1036,8 +967,7 @@
       "peopleLatentBtuhPerPerson": 475.0,
       "exhaustCfmPerSqft": 0.6,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 294
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "sorting-packing-light-assemly",
@@ -1051,8 +981,7 @@
       "peopleLatentBtuhPerPerson": 475.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 295
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "transportation-waiting",
@@ -1066,8 +995,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 297
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "warehouses",
@@ -1081,8 +1009,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 298
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "hydraulic-elevator-machine-rooms",
@@ -1096,8 +1023,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 300
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "electrical-equipment-rooms",
@@ -1111,8 +1037,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 301
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "electrical-elevator-machine-rooms",
@@ -1126,8 +1051,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 302
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "idf-mdf-electronic-eqpt",
@@ -1141,8 +1065,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.0,
-      "sourceRow": 303
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "auto-repair-rooms",
@@ -1156,8 +1079,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 304
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "darkrooms",
@@ -1171,8 +1093,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 1.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 305
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "parking-garages",
@@ -1186,8 +1107,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.75,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 307
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "storage-rooms-chemical",
@@ -1201,8 +1121,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 1.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 309
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "breakrooms-312",
@@ -1216,8 +1135,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 312
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "main-entry-lobbies",
@@ -1231,8 +1149,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.9,
-      "sourceRow": 313
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "occupiable-storage-for-dry-materials",
@@ -1246,8 +1163,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.5,
-      "sourceRow": 314
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "offices-commercial-general",
@@ -1261,8 +1177,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 316
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "offices-commercial-perimeter",
@@ -1276,8 +1191,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 317
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "offices-commercial-interior",
@@ -1291,8 +1205,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.9,
-      "sourceRow": 318
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "reception-areas",
@@ -1306,8 +1219,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 319
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "telephone-data-entry",
@@ -1321,8 +1233,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.0,
-      "sourceRow": 320
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "copy-printing-roms",
@@ -1336,8 +1247,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 321
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "birthing-room",
@@ -1351,8 +1261,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 324
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "class-1-imaging-rooms",
@@ -1366,8 +1275,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 325
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "dental-operatory",
@@ -1381,8 +1289,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 326
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "general-examination-room",
@@ -1396,8 +1303,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 327
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "other-dental-treatment-areas",
@@ -1411,8 +1317,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 328
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "physical-therapy-exercise-area",
@@ -1426,8 +1331,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 329
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "physical-therapy-individual-room",
@@ -1441,8 +1345,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 330
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "physical-therapeutic-pool-area",
@@ -1456,8 +1359,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 331
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "prosthetics-and-orthotics-room",
@@ -1471,8 +1373,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 332
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "psychiatric-consultation-room",
@@ -1486,8 +1387,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 333
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "psychiatric-examination-room",
@@ -1501,8 +1401,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 334
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "psychiatric-group-room",
@@ -1516,8 +1415,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 335
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "psychiatric-seclusion-room",
@@ -1531,8 +1429,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 336
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "speech-therapy-room",
@@ -1546,8 +1443,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 337
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "urgent-care-examination-room",
@@ -1561,8 +1457,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 338
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "urgent-care-observation-room",
@@ -1576,8 +1471,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 339
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "urgent-care-treatment-room",
@@ -1591,8 +1485,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 340
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "urgent-care-triage-room",
@@ -1606,8 +1499,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 341
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "auditorium-seating-area",
@@ -1621,8 +1513,7 @@
       "peopleLatentBtuhPerPerson": 105.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 344
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "courtrooms",
@@ -1636,8 +1527,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.7,
-      "sourceRow": 345
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "legislative-chambers",
@@ -1651,8 +1541,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.3,
-      "sourceRow": 346
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "libraries-347",
@@ -1666,8 +1555,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 347
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "lobbies",
@@ -1681,8 +1569,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 348
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "museums-children-s",
@@ -1696,8 +1583,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 349
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "museums-galleries",
@@ -1711,8 +1597,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 350
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "places-of-religious-worship",
@@ -1726,8 +1611,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 351
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "sales",
@@ -1741,8 +1625,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 355
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "barber-shop",
@@ -1756,8 +1639,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 356
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "beauty-and-nail-salons",
@@ -1771,8 +1653,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.6,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 357
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "coin-operated-laundries",
@@ -1786,8 +1667,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.25,
-      "sourceRow": 358
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "malls-common-areas",
@@ -1801,8 +1681,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 359
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "pet-shops-animal-areas",
@@ -1816,8 +1695,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.9,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 360
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "supermarket",
@@ -1831,8 +1709,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 361
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "commercial-laundry",
@@ -1846,8 +1723,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 8.0,
-      "sourceRow": 362
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "spa-treatment-room",
@@ -1861,8 +1737,7 @@
       "peopleLatentBtuhPerPerson": 365.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.0,
-      "sourceRow": 363
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "sports-arena-play-area",
@@ -1876,8 +1751,7 @@
       "peopleLatentBtuhPerPerson": 1090.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.5,
-      "sourceRow": 366
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "bowling-alley-seating",
@@ -1891,8 +1765,7 @@
       "peopleLatentBtuhPerPerson": 870.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.0,
-      "sourceRow": 367
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "disco-dance-floors",
@@ -1906,8 +1779,7 @@
       "peopleLatentBtuhPerPerson": 545.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 368
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "gambling-casinos",
@@ -1921,8 +1793,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.5,
-      "sourceRow": 369
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "game-arcades",
@@ -1936,8 +1807,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 370
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "gym-sports-arena-play-area",
@@ -1951,8 +1821,7 @@
       "peopleLatentBtuhPerPerson": 1090.0,
       "exhaustCfmPerSqft": 0.5,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.5,
-      "sourceRow": 371
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "health-club-aerobics-room",
@@ -1966,8 +1835,7 @@
       "peopleLatentBtuhPerPerson": 1090.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.0,
-      "sourceRow": 372
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "health-club-weight-rooms",
@@ -1981,8 +1849,7 @@
       "peopleLatentBtuhPerPerson": 965.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 373
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "spectator-areas",
@@ -1996,8 +1863,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 374
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "stages-studios",
@@ -2011,8 +1877,7 @@
       "peopleLatentBtuhPerPerson": 545.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 375
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "swimming-deck",
@@ -2026,8 +1891,7 @@
       "peopleLatentBtuhPerPerson": 622.5,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 377
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "swimming-pools-pool-and-deck-area",
@@ -2041,8 +1905,7 @@
       "peopleLatentBtuhPerPerson": 622.5,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.3,
-      "sourceRow": 378
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "ticket-booths",
@@ -2056,8 +1919,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 379
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "garages-common-for-multiple-units",
@@ -2071,8 +1933,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.75,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 382
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "common-corridors",
@@ -2086,8 +1947,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.5,
-      "sourceRow": 383
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "residential-kitchens-intermittent",
@@ -2101,8 +1961,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 100.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 384
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "residential-kitchens-continuous",
@@ -2116,8 +1975,7 @@
       "peopleLatentBtuhPerPerson": 0.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 50.0,
-      "cfmPerSqftEstimator": 0.0,
-      "sourceRow": 385
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "res-living-areas",
@@ -2131,8 +1989,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 386
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "res-master-bed-room",
@@ -2146,8 +2003,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 387
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "res-bed-room",
@@ -2161,8 +2017,7 @@
       "peopleLatentBtuhPerPerson": 155.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 0.75,
-      "sourceRow": 388
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "indoor-coaster",
@@ -2176,8 +2031,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.125,
-      "sourceRow": 391
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "dark-ride",
@@ -2191,8 +2045,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 2.25,
-      "sourceRow": 392
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "ride-gaming-electronics",
@@ -2206,8 +2059,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 11.0,
-      "sourceRow": 393
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "load-unload",
@@ -2221,8 +2073,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.125,
-      "sourceRow": 394
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "maintenance-bay",
@@ -2236,8 +2087,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 395
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "lobbies-theater",
@@ -2251,8 +2101,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 396
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "queue-pre-show-dry",
@@ -2266,8 +2115,7 @@
       "peopleLatentBtuhPerPerson": 250.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.5,
-      "sourceRow": 397
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "queue-pre-show-first-15-min",
@@ -2281,8 +2129,7 @@
       "peopleLatentBtuhPerPerson": 870.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 3.5,
-      "sourceRow": 398
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "stages-studios-399",
@@ -2296,8 +2143,7 @@
       "peopleLatentBtuhPerPerson": 545.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 399
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "ticket-booths-400",
@@ -2311,8 +2157,7 @@
       "peopleLatentBtuhPerPerson": 200.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.75,
-      "sourceRow": 400
+      "cfmPerSqftEstimator": 0.0
     },
     {
       "key": "indoor-plaza",
@@ -2326,8 +2171,7 @@
       "peopleLatentBtuhPerPerson": 625.0,
       "exhaustCfmPerSqft": 0.0,
       "exhaustCfmPerUnit": 0.0,
-      "cfmPerSqftEstimator": 1.5,
-      "sourceRow": 401
+      "cfmPerSqftEstimator": 0.0
     }
   ]
 }

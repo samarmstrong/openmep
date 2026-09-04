@@ -7,7 +7,7 @@ import type {
   PlanStorey,
   SpaceLoad,
   StoreySummary
-} from "@mep/model-core";
+} from "@openmep/model-core";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,

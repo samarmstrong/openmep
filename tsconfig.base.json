@@ -16,10 +16,10 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@mep/model-core": [
+      "@openmep/model-core": [
         "./packages/model-core/src/index.ts"
       ],
-      "@mep/model-core/*": [
+      "@openmep/model-core/*": [
         "./packages/model-core/src/*"
       ]
     }

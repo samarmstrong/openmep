@@ -1,5 +1,5 @@
 {
-  "name": "@mep/worker",
+  "name": "@openmep/worker",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,6 @@
     "start": "tsx src/index.ts"
   },
   "dependencies": {
-    "@mep/model-core": "*"
+    "@openmep/model-core": "*"
   }
 }

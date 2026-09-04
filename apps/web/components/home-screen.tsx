@@ -1,6 +1,6 @@
 "use client";
 
-import type { ModelSummary } from "@mep/model-core";
+import type { ModelSummary } from "@openmep/model-core";
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 

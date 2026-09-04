@@ -7,7 +7,7 @@ import type {
   SpaceSummary,
   StoreySummary,
   ViewerMode
-} from "@mep/model-core";
+} from "@openmep/model-core";
 import { useEffect, useMemo, useRef } from "react";
 import * as OBC from "@thatopen/components";
 import * as FRAGS from "@thatopen/fragments";

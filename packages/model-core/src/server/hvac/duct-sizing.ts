@@ -7,11 +7,11 @@ export {
   roundDuctVelocityFpm,
   sizeDuctForAirflow,
   sizeRoundDuct,
-} from "@mep/hvac-domain";
+} from "@openmep/hvac-domain";
 
 export type {
   AirflowType,
   DuctRole,
   DuctSizingErrorCode,
   RoundDuctSize,
-} from "@mep/hvac-domain";
+} from "@openmep/hvac-domain";

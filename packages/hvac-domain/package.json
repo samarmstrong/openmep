@@ -1,5 +1,5 @@
 {
-  "name": "@mep/hvac-domain",
+  "name": "@openmep/hvac-domain",
   "version": "0.1.0",
   "description": "Deterministic round-duct sizing and supply-network propagation.",
   "license": "MIT",

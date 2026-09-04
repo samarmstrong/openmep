@@ -9,7 +9,7 @@ import type {
   SpaceSummary,
   StoreySummary,
   ViewerMode
-} from "@mep/model-core";
+} from "@openmep/model-core";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";

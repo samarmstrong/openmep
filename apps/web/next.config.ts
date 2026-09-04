@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@mep/model-core"],
+  transpilePackages: ["@openmep/model-core"],
   serverExternalPackages: ["web-ifc"],
   typedRoutes: true
 };

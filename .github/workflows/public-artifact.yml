@@ -38,13 +38,13 @@ jobs:
 
       - name: Build public packages
         run: |
-          npm run build --workspace @mep/hvac-domain
-          npm run build --workspace @mep/agent-benchmark
+          npm run build --workspace @openmep/hvac-domain
+          npm run build --workspace @openmep/agent-benchmark
 
       - name: Test public packages
         run: |
-          npm run test --workspace @mep/hvac-domain
-          npm run test --workspace @mep/agent-benchmark
+          npm run test --workspace @openmep/hvac-domain
+          npm run test --workspace @openmep/agent-benchmark
 
       - name: Build full workspace
         run: npm run build
@@ -57,5 +57,5 @@ jobs:
 
       - name: Inspect package contents
         run: |
-          npm pack --dry-run --workspace @mep/hvac-domain
-          npm pack --dry-run --workspace @mep/agent-benchmark
+          npm pack --dry-run --workspace @openmep/hvac-domain
+          npm pack --dry-run --workspace @openmep/agent-benchmark

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import type { ModelSourceSummary, SpaceSummary, StoreySummary } from "@mep/model-core";
+import type { ModelSourceSummary, SpaceSummary, StoreySummary } from "@openmep/model-core";
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

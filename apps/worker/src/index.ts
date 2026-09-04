@@ -3,7 +3,7 @@ import {
   ingestJobPayloadSchema,
   MODEL_INGEST_QUEUE,
   processModelIngestJob
-} from "@mep/model-core/server";
+} from "@openmep/model-core/server";
 
 const boss = await getBoss();
 

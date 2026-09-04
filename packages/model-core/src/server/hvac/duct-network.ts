@@ -5,7 +5,7 @@ import {
   type DuctNetworkFinding,
   type NetworkItem,
   type RoundDuctSize,
-} from "@mep/hvac-domain";
+} from "@openmep/hvac-domain";
 
 import type { MechanicalEditItem } from "../../types";
 

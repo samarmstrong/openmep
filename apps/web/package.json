@@ -1,5 +1,5 @@
 {
-  "name": "@mep/web",
+  "name": "@openmep/web",
   "private": true,
   "scripts": {
     "dev": "node --env-file=../../.env ./scripts/dev.mjs",
@@ -9,7 +9,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@mep/model-core": "*",
+    "@openmep/model-core": "*",
     "@thatopen/components": "^3.3.3",
     "@thatopen/components-front": "^3.3.3",
     "@thatopen/fragments": "^3.3.6",

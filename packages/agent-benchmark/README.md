@@ -1,29 +1,29 @@
-# @mep/agent-benchmark
+# @openmep/agent-benchmark
 
 A small, dependency-free benchmark for agents that repair a synthetic HVAC plan. It contains no IFC data and does not depend on private MEP schemas. Fixtures are deliberately simple structural JSON so an adapter can map any plan representation into this boundary.
 
 ## Quick start
 
 ```sh
-npx @mep/agent-benchmark verify
+npx @openmep/agent-benchmark verify
 cp fixtures/single/T2/starter.json /tmp/t2.json
 # edit /tmp/t2.json
 npx mep-benchmark grade fixtures/single/T2 /tmp/t2.json
 ```
 
-`grade` prints deterministic JSON and exits `0` for a pass, `1` for a valid graded failure, or `2` for malformed input/configuration. `verify` validates every fixture, every recorded result, and their SHA-256 manifests; it exits `0` or `2`. `size <cfm> <airflowType> <role>` runs the same `@mep/hvac-domain` sizing engine the grader uses for T4 (e.g. `mep-benchmark size 100 supply runout` → `standardDiameterIn: 7`), so an agent under test can be handed the oracle's engine as a tool rather than its answer.
+`grade` prints deterministic JSON and exits `0` for a pass, `1` for a valid graded failure, or `2` for malformed input/configuration. `verify` validates every fixture, every recorded result, and their SHA-256 manifests; it exits `0` or `2`. `size <cfm> <airflowType> <role>` runs the same `@openmep/hvac-domain` sizing engine the grader uses for T4 (e.g. `mep-benchmark size 100 supply runout` → `standardDiameterIn: 7`), so an agent under test can be handed the oracle's engine as a tool rather than its answer.
 
 Fixtures are grouped into sets under `fixtures/<set>/T1–T6`: `single` (one room, one runout per task) and `branching` (one AHU → main → two branches → seven runouts across four rooms, each task injecting one fault into the same base network; authored deterministically by `scripts/author-branching-fixtures.mjs`). Each task directory contains `task.json` (prompt, optional `promptVariants` such as `finding`, metadata, guard), `starter.json`, `oracle.json`, and `initial-report.json`. Every starter has exactly one intended target finding. The target must be resolved, no error may be newly introduced, and only the task's approved mutation plan may be changed. Warnings are reported but nonfatal.
 
 ## API
 
 ```js
-import { grade, sizeSegment, verifyFixtures, validatePlan } from "@mep/agent-benchmark";
+import { grade, sizeSegment, verifyFixtures, validatePlan } from "@openmep/agent-benchmark";
 const result = grade(task, starter, candidate);
 const runout = sizeSegment({ cfm: 100, airflowType: "supply", role: "runout" }); // standardDiameterIn: 7
 ```
 
-The plan shape is `version`, `spaces`, `equipment`, `terminals`, and `segments`. See `src/schema.js` for the formal validation contract. T1 adds a missing terminal, T2 moves a terminal into its declared room, T3 reconnects a terminal to supply equipment, T4 sizes a runout using `@mep/hvac-domain`, T5 balances two terminal flows, and T6 is compound: add a terminal, add a new runout (no stub exists), and size it with the engine in one edit.
+The plan shape is `version`, `spaces`, `equipment`, `terminals`, and `segments`. See `src/schema.js` for the formal validation contract. T1 adds a missing terminal, T2 moves a terminal into its declared room, T3 reconnects a terminal to supply equipment, T4 sizes a runout using `@openmep/hvac-domain`, T5 balances two terminal flows, and T6 is compound: add a terminal, add a new runout (no stub exists), and size it with the engine in one edit.
 
 The fixture is entirely synthetic and authored for this benchmark. No IFC file,
 client identifier, commercial-project geometry, or derived project data is
