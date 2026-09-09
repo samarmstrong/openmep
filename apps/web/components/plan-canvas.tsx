@@ -42,6 +42,9 @@ type Props = {
   selectedGlobalId: string | null;
   selectedSpaceId: string | null;
   onSelect: (item: SelectedItem) => void;
+  highlightedItemIds?: readonly string[];
+  frameSelection?: boolean;
+  renderDuctWidths?: boolean;
 };
 
 const OVERVIEW_PADDING = 0.06;
@@ -212,7 +215,10 @@ export function PlanCanvas({
   storey,
   selectedGlobalId,
   selectedSpaceId,
-  onSelect
+  onSelect,
+  highlightedItemIds = [],
+  frameSelection = true,
+  renderDuctWidths = false
 }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dragRef = useRef<DragState | null>(null);
@@ -238,7 +244,7 @@ export function PlanCanvas({
     [viewScopeKey]
   );
   const selectedSpaceViewKey =
-    storey && selectedSpaceId
+    storey && selectedSpaceId && frameSelection
       ? (() => {
           const space =
             storey.architecture.spaces.find((candidate) => candidate.globalId === selectedSpaceId) ??
@@ -269,7 +275,7 @@ export function PlanCanvas({
   }, [defaultViewBox, viewScopeKey]);
 
   useEffect(() => {
-    if (!storey || !defaultViewBox) {
+    if (!storey || !defaultViewBox || !frameSelection) {
       return;
     }
 
@@ -322,7 +328,7 @@ export function PlanCanvas({
         window.cancelAnimationFrame(animationFrame);
       }
     };
-  }, [defaultViewBox, selectedSpaceId, selectedSpaceViewKey, viewScopeKey]);
+  }, [defaultViewBox, selectedSpaceId, selectedSpaceViewKey, viewScopeKey, frameSelection]);
 
   if (!storey || !viewBox || !defaultViewBox) {
     return <div className="empty-state">Plan view unavailable for this storey.</div>;
@@ -542,6 +548,7 @@ export function PlanCanvas({
           <g className="plan-layer mechanical edit">
             {mechanicalEditItems.map((item) => {
               if (item.editKind === "edge") {
+                const highlighted = highlightedItemIds.includes(item.id);
                 return (
                   <path
                     aria-label={`${item.kind} ${item.elementRef}`}
@@ -549,6 +556,14 @@ export function PlanCanvas({
                     d={linearPath(item)}
                     fill="none"
                     key={item.id}
+                    data-edit-id={item.id}
+                    data-highlighted={highlighted ? "true" : undefined}
+                    style={highlighted || renderDuctWidths ? {
+                      ...(highlighted ? { stroke: "#61dced" } : {}),
+                      strokeWidth: item.width ?? 0.12,
+                      strokeDasharray: "none",
+                      fill: "none"
+                    } : undefined}
                     onClick={() => onSelect({ globalId: item.elementRef, kind: item.kind })}
                     strokeWidth={Math.max(item.width ?? 0.12, 0.12)}
                   />

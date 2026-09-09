@@ -1,14 +1,29 @@
 # @openmep/agent-benchmark
 
-A small, dependency-free benchmark for agents that repair a synthetic HVAC plan. It contains no IFC data and does not depend on private MEP schemas. Fixtures are deliberately simple structural JSON so an adapter can map any plan representation into this boundary.
+A small benchmark for agents that repair a synthetic HVAC plan, using the local `@openmep/hvac-domain` sizing package. It contains no IFC data and does not depend on private MEP schemas. Fixtures are deliberately simple structural JSON so an adapter can map any plan representation into this boundary.
 
 ## Quick start
 
 ```sh
-npx @openmep/agent-benchmark verify
-cp fixtures/single/T2/starter.json /tmp/t2.json
-# edit /tmp/t2.json
-npx mep-benchmark grade fixtures/single/T2 /tmp/t2.json
+git clone https://github.com/samarmstrong/openmep.git
+cd openmep
+npm ci
+npm run build --workspace @openmep/hvac-domain --workspace @openmep/agent-benchmark
+npm run benchmark:replay:t4
+```
+
+Run these commands with Node.js 24+ and npm. The replay verifies the manifests
+and re-grades frozen candidates; it does not call an agent or require IFCs or
+credentials. See the [case study](../../docs/t4-sizing-case-study.md) for the
+evidence and limitations. From this package directory after building, the
+same example is `node examples/t4-replay.mjs`.
+
+To grade an edit of your own, from the repository root:
+
+```sh
+cp packages/agent-benchmark/fixtures/single/T2/starter.json /tmp/t2.json
+# Edit /tmp/t2.json to resolve the task.
+node packages/agent-benchmark/bin/mep-benchmark.js grade packages/agent-benchmark/fixtures/single/T2 /tmp/t2.json
 ```
 
 `grade` prints deterministic JSON and exits `0` for a pass, `1` for a valid graded failure, or `2` for malformed input/configuration. `verify` validates every fixture, every recorded result, and their SHA-256 manifests; it exits `0` or `2`. `size <cfm> <airflowType> <role>` runs the same `@openmep/hvac-domain` sizing engine the grader uses for T4 (e.g. `mep-benchmark size 100 supply runout` → `standardDiameterIn: 7`), so an agent under test can be handed the oracle's engine as a tool rather than its answer.
@@ -41,16 +56,22 @@ reliability claim.
 
 ## Recorded T4 sizing-context experiment (0.2.0)
 
-`results/t4-context-v1.json` holds 15 fresh `claude-sonnet-5` attempts on T4
+`results/t4-context-v1.json` holds 15 recorded attempts requesting `claude-sonnet-5` on T4
 (fixed 7-inch oracle, three per context variant; prompts under
 `results/t4-context/prompts/`, exact candidates under
 `results/t4-context/candidates/`). Prompt-only and formula-parameters-only
-context each passed 1/3 — every miss rounded the exact 6.08 in down to 6.
+context each passed 1/3 — every miss selected 6 in against the engine's 7-in target.
 Stating the next-standard-size selection rule, exposing the engine's
 TypeScript API, or exposing `mep-benchmark size` as a tool each passed 3/3;
-the tool variant was fastest (14.7 s mean vs. 57.2 s for API-only). The
-missing context was the selection rule, not the friction parameters.
-Reproduce with `npm run experiment:t4-context` (requires the `claude` CLI).
+the tool-available variant had the lowest mean recorded duration (14.7 s vs.
+57.2 s for API-only). This supports making selection rules explicit in this
+case; it does not establish the agents' internal reasoning. All trials report
+usage for both `claude-sonnet-5` and `claude-haiku-4-5-20251001`; tool-call
+traces and the original runtime version were not preserved in this record.
+The API-only condition supplied a specification, not a callable API.
+Replay the frozen evidence with `npm run replay:t4` from this package directory.
+`experiment:t4-context` launches new paid CLI trials and overwrites recorded
+results; it is not the replay command.
 
 ## Recorded branching matrix (0.3.0)
 

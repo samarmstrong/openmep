@@ -55,6 +55,9 @@ jobs:
       - name: Verify benchmark
         run: npm run benchmark:verify
 
+      - name: Replay recorded sizing example
+        run: npm run benchmark:replay:t4
+
       - name: Inspect package contents
         run: |
           npm pack --dry-run --workspace @openmep/hvac-domain

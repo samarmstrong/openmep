@@ -80,6 +80,7 @@ export function HomeScreen() {
         <p className="hero-copy">
           Upload an architectural IFC with an optional mechanical IFC overlay, let the worker convert both to Fragments, then open a synchronized 3D orbit view and storey-driven 2D plan mode.
         </p>
+        <Link className="primary-button" href="/design">Try airflow design</Link>
       </section>
 
       <section className="card upload-card">

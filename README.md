@@ -1,4 +1,4 @@
-# mep
+# OpenMEP
 
 Open MEP building state that a language model can reason about and edit
 correctly — grounded in deterministic loads and duct sizing, graded by a
@@ -27,8 +27,29 @@ exporter quirks the pipeline handles. No IFC is committed to this repository.
 
 ## Quick start
 
+### Try airflow design
+
+Change a room's supply airflow, preview the connected duct sizes on the plan,
+apply or undo the change, and export the edited plan JSON.
+
 ```sh
-npm install
+npm ci
+npm run dev:design
+# Open http://localhost:3001/design
+```
+
+Requires Node.js 24+. The first launch fetches the public Office IFC pair and
+prepares Level 1; no database, `.env`, or model credentials are needed. Pass
+`-- --refresh` to rebuild the example, or `-- --port 3002` to use another port.
+Edits are session-local manual airflow scenarios with round-duct proposals;
+export saves the applied plan JSON, not a rewritten IFC. The public example
+labels its inferred connections and assumed initial demands. Existing model
+viewers also link to **Airflow design** for their selected storey.
+
+### Full viewer and IFC pipeline
+
+```sh
+npm ci
 fixtures/fetch-public-ifc.sh            # duplex + wbdg_office (~55 MB)
 npm run build --workspace @openmep/hvac-domain --workspace @openmep/agent-benchmark
 npm test

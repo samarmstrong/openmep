@@ -414,6 +414,11 @@ export function ModelWorkspace({ modelId }: Props) {
         </div>
 
         <div className="nav-right">
+          {mode === "plan" && selectedStoreyId && (
+            <Link className="nav-btn nav-btn-accent" href={`/models/${modelId}/design?storeyId=${encodeURIComponent(selectedStoreyId)}`}>
+              Airflow design
+            </Link>
+          )}
           <div className="mode-toggle">
             <button
               className={mode === "3d" ? "mode-button active" : "mode-button"}

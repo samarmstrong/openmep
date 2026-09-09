@@ -107,6 +107,7 @@ async function main(): Promise<void> {
     const write = (file: string, value: unknown) =>
       writeFile(path.join(dir, file), JSON.stringify(value, null, 2));
     await Promise.all([
+      write("planStorey.json", storey),
       write("architecture.json", storey.architecture),
       write("loads.json", storey.loads),
       write("mechanicalVisual2D.json", storey.mechanicalVisual2D),

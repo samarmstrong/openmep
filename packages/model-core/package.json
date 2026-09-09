@@ -5,7 +5,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./server": "./src/server/index.ts",
-    "./viewer": "./src/viewer/index.ts"
+    "./viewer": "./src/viewer/index.ts",
+    "./design": "./src/design.ts",
+    "./types": "./src/types.ts"
   },
   "scripts": {
     "build": "tsc --project tsconfig.json",
