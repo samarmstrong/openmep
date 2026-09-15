@@ -32,3 +32,34 @@ export type {
   SupplyDuctNetworkResult,
   SupplyDuctSegmentRecommendation,
 } from "./supply-network.js";
+
+export {
+  flatOvalEquivalentDiameterIn,
+  rectangularEquivalentDiameterIn,
+} from "./equivalent-diameter.js";
+
+export {
+  DEFAULT_PORT_COINCIDENCE_TOLERANCE_M,
+  PortGraphError,
+  connectCoincidentPorts,
+} from "./port-graph.js";
+export type { PortGraphErrorCode, PortGraphOptions, PortRef } from "./port-graph.js";
+
+export { compareRoundDuctSize } from "./size-comparison.js";
+export type {
+  DuctSizeStatus,
+  RoundDuctSizeComparison,
+  RoundDuctSizeComparisonInput,
+} from "./size-comparison.js";
+
+export { NetworkInputError, readNetworkInput, sizeNetworkInput } from "./cli.js";
+export type {
+  ExistingSection,
+  NetworkFinding,
+  NetworkFindingCode,
+  NetworkInputErrorCode,
+  NetworkItemInput,
+  NetworkSegmentInput,
+  NetworkSegmentSizing,
+  NetworkSizingResult,
+} from "./cli.js";

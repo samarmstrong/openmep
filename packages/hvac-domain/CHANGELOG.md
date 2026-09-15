@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.3.0 - 2026-09-15
+
+- Added the `openmep-hvac` CLI: `size <network.json|->` sizes every supply run
+  of a `NetworkItem` document from terminal `requiredCfm`, grades optional
+  existing sections (`existing: {shape, diameterIn | widthIn, heightIn}`) as
+  `ok`/`undersized`/`oversized`, and reports `missing-required-cfm`,
+  `no-equipment-path`, and `dangling-reference` findings; `duct --cfm n` sizes
+  one run. No host or editor required. Library exports `readNetworkInput`,
+  `sizeNetworkInput`, `NetworkInputError`.
+- Bundled `examples/furnace-two-registers.items.json`.
+
+## 0.2.0 - 2026-09-09
+
+- Added `connectCoincidentPorts`: host-agnostic connectivity from typed ports
+  that coincide within a tolerance (default 5 cm), with system-tag
+  compatibility, for editors that expose ports rather than explicit links.
+- Added `rectangularEquivalentDiameterIn` and `flatOvalEquivalentDiameterIn`
+  (ASHRAE circular equivalents for equal friction and airflow).
+- Added `compareRoundDuctSize`: grades an existing diameter against a
+  recommendation as `ok`, `undersized`, or `oversized`, with actual velocity,
+  friction rate, and velocity-cap check.
+- Removed stale generated `src/*.d.ts` files; types ship from `dist/`.
+
 ## 0.1.0 - 2026-08-03
 
 - Initial public release: deterministic round-duct sizing and supply-network propagation.

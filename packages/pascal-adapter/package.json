@@ -1,7 +1,7 @@
 {
-  "name": "@openmep/hvac-domain",
+  "name": "@openmep/pascal-adapter",
   "version": "0.3.0",
-  "description": "Deterministic round-duct sizing and supply-network propagation, as a library and a host-free CLI (openmep-hvac).",
+  "description": "Size and check HVAC duct systems in Pascal Editor scenes with OpenMEP's deterministic engine; emits apply_patch batches.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -13,7 +13,7 @@
   },
   "types": "./dist/index.d.ts",
   "bin": {
-    "openmep-hvac": "./bin/openmep-hvac.js"
+    "openmep-pascal": "./bin/openmep-pascal.js"
   },
   "files": [
     "bin",
@@ -21,9 +21,7 @@
     "examples",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md",
-    "CONTRIBUTING.md",
-    "SECURITY.md"
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=24"
@@ -35,16 +33,23 @@
     "mep",
     "hvac",
     "duct-sizing",
-    "ashrae",
-    "equal-friction"
+    "pascal",
+    "pascal-editor",
+    "mcp"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc --project tsconfig.json",
     "test": "vitest run --config vitest.config.ts",
-    "size:example": "node ./bin/openmep-hvac.js size examples/furnace-two-registers.items.json --pretty"
+    "size:example": "node ./bin/openmep-pascal.js size examples/furnace-two-registers.json --pretty",
+    "live:roundtrip": "node ./examples/live-roundtrip.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@openmep/hvac-domain": "0.3.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "zod": "^4.6.0"
   }
 }
