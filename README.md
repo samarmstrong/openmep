@@ -14,7 +14,9 @@ edit it without breaking it.
 
 | Workspace | What it does |
 |---|---|
-| `packages/hvac-domain` (`@openmep/hvac-domain`) | Dependency-free equal-friction round-duct sizing and supply-network CFM propagation. |
+| `packages/hvac-domain` (`@openmep/hvac-domain`) | Dependency-free equal-friction round-duct sizing, supply-network CFM propagation, port-coincidence connectivity, ASHRAE equivalent diameters, and actual-vs-recommended size grading. `openmep-hvac size network.json` runs all of it on a JSON network with no editor. |
+| `packages/pascal-adapter` (`@openmep/pascal-adapter`) | Sizes and checks HVAC in [Pascal Editor](https://github.com/pascalorg/editor) scenes, live through Pascal's MCP (`openmep-pascal mcp size`: export, size, `apply_patch` as one undo step, verify) or offline on exported JSON. |
+| `skills/pascal-duct-sizing` | Agent skill (Pascal skills.sh format) that drives the adapter from an MCP-connected agent: gather CFM, set `metadata.requiredCfm`, run `openmep-pascal mcp size`, report, undo. `npx skills add samarmstrong/openmep --skill pascal-duct-sizing`. |
 | `packages/agent-benchmark` (`@openmep/agent-benchmark`) | Synthetic T1–T6 mechanical-plan editing benchmark (single + branching fixture sets), deterministic grader, `mep-benchmark` CLI (`grade`, `verify`, `size`), recorded results. |
 | `packages/model-core` | IFC ingestion (web-ifc): storeys, spaces, elements, space boundaries, geometric envelope recovery; 2D plan extraction (Clipper2 footprints); design-day cooling/heating loads (ASHRAE 62.1 ventilation, 90.1 assemblies); mechanical plan layers with CFM-grounded terminals and inferred duct connectivity; plan validator; headless eval runner. |
 | `apps/web` | Next.js 16 viewer: 3D (That Open / Three.js) and storey-driven 2D plan mode with the load dashboard. |
@@ -26,6 +28,24 @@ Duplex and WBDG Office ARCH + MEP pairs, CC BY 4.0) fetched by
 exporter quirks the pipeline handles. No IFC is committed to this repository.
 
 ## Quick start
+
+### Size a duct network from JSON (no editor required)
+
+```sh
+npx -p @openmep/hvac-domain openmep-hvac size packages/hvac-domain/examples/furnace-two-registers.items.json --pretty
+npx -p @openmep/hvac-domain openmep-hvac duct --cfm 250 --role main --diameter-in 6
+```
+
+From a checkout: `npm ci && npm run build --workspace @openmep/hvac-domain`, then
+`node packages/hvac-domain/bin/openmep-hvac.js ...`.
+
+The network is a list of equipment, fittings, terminals with engineer-supplied
+`requiredCfm`, and segments linked by `connectedItemRefs`. The result lists each
+supply run's CFM, role, recommended standard round diameter, velocity and friction
+rate, grades any existing section as `ok`/`undersized`/`oversized`, and reports
+terminals with no airflow or no path to equipment. Any host that can produce this
+document gets the same engine; `openmep-pascal items` produces it from a Pascal
+scene.
 
 ### Try airflow design
 

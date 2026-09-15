@@ -1,0 +1,111 @@
+{
+  "items": [
+    {
+      "id": "duct-fitting_tee",
+      "elementRef": "duct-fitting_tee",
+      "kind": "fitting",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-segment_main",
+        "duct-segment_run_a",
+        "duct-segment_run_b"
+      ]
+    },
+    {
+      "id": "duct-segment_main",
+      "elementRef": "duct-segment_main",
+      "kind": "segment",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-fitting_tee",
+        "hvac-equipment_furnace"
+      ],
+      "existing": {
+        "shape": "round",
+        "diameterIn": 6
+      }
+    },
+    {
+      "id": "duct-segment_return",
+      "elementRef": "duct-segment_return",
+      "kind": "segment",
+      "airflowType": "return",
+      "connectedItemRefs": [
+        "duct-terminal_return",
+        "hvac-equipment_furnace"
+      ],
+      "existing": {
+        "shape": "round",
+        "diameterIn": 8
+      }
+    },
+    {
+      "id": "duct-segment_run_a",
+      "elementRef": "duct-segment_run_a",
+      "kind": "segment",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-fitting_tee",
+        "duct-terminal_a"
+      ],
+      "existing": {
+        "shape": "round",
+        "diameterIn": 6
+      }
+    },
+    {
+      "id": "duct-segment_run_b",
+      "elementRef": "duct-segment_run_b",
+      "kind": "segment",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-fitting_tee",
+        "duct-terminal_b"
+      ],
+      "existing": {
+        "shape": "round",
+        "diameterIn": 6
+      }
+    },
+    {
+      "id": "duct-terminal_a",
+      "elementRef": "duct-terminal_a",
+      "kind": "terminal",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-segment_run_a"
+      ],
+      "requiredCfm": 150
+    },
+    {
+      "id": "duct-terminal_b",
+      "elementRef": "duct-terminal_b",
+      "kind": "terminal",
+      "airflowType": "supply",
+      "connectedItemRefs": [
+        "duct-segment_run_b"
+      ],
+      "requiredCfm": 100
+    },
+    {
+      "id": "duct-terminal_return",
+      "elementRef": "duct-terminal_return",
+      "kind": "terminal",
+      "airflowType": "return",
+      "connectedItemRefs": [
+        "duct-segment_return"
+      ],
+      "requiredCfm": null
+    },
+    {
+      "id": "hvac-equipment_furnace",
+      "elementRef": "hvac-equipment_furnace",
+      "kind": "equipment",
+      "airflowType": "unknown",
+      "connectedItemRefs": [
+        "duct-segment_main",
+        "duct-segment_return"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,27 @@
 # @openmep/hvac-domain
 
-Deterministic, dependency-free ESM primitives for equal-friction round-duct sizing and supply-air network propagation.
+Deterministic, dependency-free ESM primitives for equal-friction round-duct sizing and supply-air network propagation, plus a CLI that runs them on a JSON network with no editor or host.
+
+## CLI
+
+```sh
+npx -p @openmep/hvac-domain openmep-hvac size network.json --pretty
+npx -p @openmep/hvac-domain openmep-hvac duct --cfm 250 --role main --diameter-in 6
+```
+
+`size` takes a JSON array of `NetworkItem`s (or `{ "items": [...] }`): equipment,
+fittings, terminals with `requiredCfm`, and segments linked by `connectedItemRefs`.
+A segment may describe its existing section, `{"shape":"round","diameterIn":6}` or
+`{"shape":"rect","widthIn":14,"heightIn":8}`, and is then graded `ok`,
+`undersized`, or `oversized` by ASHRAE circular equivalent. Output: `summary`,
+`findings` (`missing-required-cfm`, `no-equipment-path`, `dangling-reference`,
+`undersized`, `oversized`), and `segments` with CFM, role, recommended standard
+diameter, velocity, and friction rate. Exit codes: 0, 1 with `--fail-on-findings`
+and error findings, 2 for invalid input (`NetworkInputError` with a JSON path) or an
+engine error. See `examples/furnace-two-registers.items.json`; the same document is
+what `openmep-pascal items` emits from a Pascal scene.
+
+## Library
 
 ```ts
 import { recommendSupplyDuctSegments } from "@openmep/hvac-domain";

@@ -39,11 +39,13 @@ jobs:
       - name: Build public packages
         run: |
           npm run build --workspace @openmep/hvac-domain
+          npm run build --workspace @openmep/pascal-adapter
           npm run build --workspace @openmep/agent-benchmark
 
       - name: Test public packages
         run: |
           npm run test --workspace @openmep/hvac-domain
+          npm run test --workspace @openmep/pascal-adapter
           npm run test --workspace @openmep/agent-benchmark
 
       - name: Build full workspace
