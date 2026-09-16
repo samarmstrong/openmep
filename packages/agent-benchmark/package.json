@@ -27,7 +27,7 @@
   },
   "keywords": ["mep", "hvac", "benchmark", "agents", "evaluation"],
   "dependencies": {
-    "@openmep/hvac-domain": "0.3.0"
+    "@openmep/hvac-domain": "0.3.1"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

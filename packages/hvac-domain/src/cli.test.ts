@@ -100,6 +100,7 @@ describe("runCli", () => {
     expect(captured.err.join("")).toMatch(/NetworkInputError \[invalid-argument\]/);
     expect(await runCli([], capture().io)).toBe(2);
     expect(await runCli(["help"], capture().io)).toBe(0);
+    expect(await runCli(["--help"], capture().io)).toBe(0);
   });
   it("duct: sizes one run and grades an existing diameter", async () => {
     const { io, out } = capture();

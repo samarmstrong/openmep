@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2026-09-16
+
+- `--help` as the first argument prints usage (exit 0) instead of being parsed as a command.
+
 ## 0.3.0 - 2026-09-15
 
 - Added the `openmep-hvac` CLI: `size <network.json|->` sizes every supply run
