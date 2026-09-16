@@ -1,6 +1,6 @@
 {
   "name": "@openmep/pascal-adapter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Size and check HVAC duct systems in Pascal Editor scenes with OpenMEP's deterministic engine; emits apply_patch batches.",
   "license": "MIT",
   "type": "module",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@openmep/hvac-domain": "0.3.0"
+    "@openmep/hvac-domain": "0.3.1"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

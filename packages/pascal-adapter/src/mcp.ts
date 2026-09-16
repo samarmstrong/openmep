@@ -106,7 +106,7 @@ export type PascalMcpSession = {
 };
 
 /** Open a session over any SDK transport; tests pass an in-memory pair. */
-export async function openPascalMcpSession(transport: Transport, clientInfo = { name: "openmep-pascal", version: "0.3.0" }): Promise<PascalMcpSession> {
+export async function openPascalMcpSession(transport: Transport, clientInfo = { name: "openmep-pascal", version: "0.3.1" }): Promise<PascalMcpSession> {
   const client = new Client(clientInfo);
   try {
     await client.connect(transport);

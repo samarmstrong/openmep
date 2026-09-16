@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2026-09-16
+
+- `--help` as the first argument prints usage (exit 0) instead of being parsed as a command. Depends on `@openmep/hvac-domain` 0.3.1.
+
 ## 0.3.0 - 2026-09-15
 
 - `discoverPascalMcp` reads Pascal CLI 1.0.0's `run/mcp.json` and falls back to

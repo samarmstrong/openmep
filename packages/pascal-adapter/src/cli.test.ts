@@ -45,5 +45,6 @@ describe("openmep-pascal CLI (requires a built dist/)", () => {
     expect(bad.stderr).toMatch(/PascalAdapterError \[invalid-argument\]/);
     expect(run().status).toBe(2);
     expect(run("help").status).toBe(0);
+    expect(run("--help").status).toBe(0);
   });
 });

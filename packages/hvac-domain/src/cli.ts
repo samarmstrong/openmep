@@ -239,7 +239,7 @@ type Io = { stdout: (text: string) => void; stderr: (text: string) => void };
 export async function runCli(argv: readonly string[], io: Io = { stdout: (t) => process.stdout.write(t), stderr: (t) => process.stderr.write(t) }): Promise<number> {
   try {
     const { command, positionals, flags } = parseArgs(argv);
-    if (command === undefined || command === "help" || flags.get("help") === true) {
+    if (command === undefined || command === "help" || command === "--help" || flags.get("help") === true) {
       io.stdout(`${CLI_USAGE}\n`);
       return command === undefined ? 2 : 0;
     }
