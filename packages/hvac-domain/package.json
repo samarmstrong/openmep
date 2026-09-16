@@ -13,7 +13,7 @@
   },
   "types": "./dist/index.d.ts",
   "bin": {
-    "openmep-hvac": "./bin/openmep-hvac.js"
+    "openmep-hvac": "bin/openmep-hvac.js"
   },
   "files": [
     "bin",
