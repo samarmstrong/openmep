@@ -16,7 +16,8 @@ describe("buildPascalNetwork", () => {
     expect(connected("duct-segment_run_a")).toEqual(["duct-fitting_tee", "duct-terminal_a"]);
     expect(connected("duct-segment_run_b")).toEqual(["duct-fitting_tee", "duct-terminal_b"]);
     expect(connected("duct-segment_return")).toEqual(["duct-terminal_return", "hvac-equipment_furnace"]);
-    expect(network.findings).toEqual([]);
+    // The bundled return grille has no CFM, so the only finding is the prompt to supply it.
+    expect(network.findings).toEqual([expect.objectContaining({ code: "missing-required-cfm", severity: "info", nodeId: "duct-terminal_return" })]);
   });
   it("maps nodes to NetworkItems with node ids as elementRefs and equipment compatible with both sides", () => {
     const network = buildPascalNetwork(readPascalScene(example()));
@@ -34,7 +35,7 @@ describe("buildPascalNetwork", () => {
     const network = buildPascalNetwork(readPascalScene(scene));
     expect(network.connections.get("duct-segment_return")).not.toContain("duct-segment_main");
   });
-  it("reports missing, invalid, and custom CFM readings on supply terminals only", () => {
+  it("reports missing, invalid, and custom CFM readings; a missing return CFM is info only", () => {
     const scene = example();
     scene.nodes["duct-terminal_a"]!.metadata = {};
     scene.nodes["duct-terminal_b"]!.metadata = { requiredCfm: "lots" };
@@ -42,6 +43,7 @@ describe("buildPascalNetwork", () => {
     expect(network.findings).toEqual([
       expect.objectContaining({ code: "missing-required-cfm", severity: "warning", nodeId: "duct-terminal_a" }),
       expect.objectContaining({ code: "invalid-required-cfm", severity: "error", nodeId: "duct-terminal_b", detail: { raw: "lots" } }),
+      expect.objectContaining({ code: "missing-required-cfm", severity: "info", nodeId: "duct-terminal_return" }),
     ]);
     const custom = buildPascalNetwork(readPascalScene(scene), { requiredCfm: () => ({ kind: "present", cfm: 42 }) });
     expect(custom.findings).toEqual([]);

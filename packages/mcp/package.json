@@ -1,8 +1,14 @@
 {
-  "name": "@openmep/pascal-adapter",
-  "version": "0.4.0",
-  "description": "Size and check HVAC duct systems in Pascal Editor scenes with OpenMEP's deterministic engine; emits apply_patch batches.",
+  "name": "@openmep/mcp",
+  "version": "0.1.0",
+  "mcpName": "io.github.samarmstrong/openmep",
+  "description": "MCP server for OpenMEP's deterministic HVAC duct sizing: size one run or a whole supply/return network from any agent, no editor required.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samarmstrong/openmep.git",
+    "directory": "packages/mcp"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -13,12 +19,11 @@
   },
   "types": "./dist/index.d.ts",
   "bin": {
-    "openmep-pascal": "bin/openmep-pascal.js"
+    "openmep-mcp": "bin/openmep-mcp.js"
   },
   "files": [
     "bin",
     "dist",
-    "examples",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -33,23 +38,21 @@
     "mep",
     "hvac",
     "duct-sizing",
-    "pascal",
-    "pascal-editor",
-    "mcp"
+    "mcp",
+    "model-context-protocol",
+    "ashrae"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc --project tsconfig.json",
-    "test": "vitest run --config vitest.config.ts",
-    "size:example": "node ./bin/openmep-pascal.js size examples/furnace-two-registers.json --pretty",
-    "live:roundtrip": "node ./examples/live-roundtrip.mjs"
+    "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@openmep/hvac-domain": "0.4.0"
+    "@openmep/hvac-domain": "0.4.0",
+    "zod": "^4.6.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0",
-    "zod": "^4.6.0"
+    "vitest": "^4.1.0"
   }
 }

@@ -95,7 +95,7 @@
       "connectedItemRefs": [
         "duct-segment_return"
       ],
-      "requiredCfm": null
+      "requiredCfm": 250
     },
     {
       "id": "hvac-equipment_furnace",

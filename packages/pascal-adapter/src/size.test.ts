@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { rectangularEquivalentDiameterIn, sizeSupplyRoundDuct } from "@openmep/hvac-domain";
+import { rectangularEquivalentDiameterIn, sizeDuctForAirflow, sizeSupplyRoundDuct } from "@openmep/hvac-domain";
 import { describe, expect, it } from "vitest";
 import { PASCAL_DUCT_DIAMETER_RANGE_IN, sizePascalScene } from "./size.js";
 
@@ -20,7 +20,7 @@ describe("sizePascalScene", () => {
       expect(segment.comparison.status).toBe("undersized");
       expect(segment.patchedDiameterIn).toBe(segment.recommended.standardDiameterIn);
     }
-    expect(result.summary).toMatchObject({ nodes: 9, segments: 4, fittings: 1, terminals: 3, equipment: 1, supplyTerminalsWithCfm: 2, sizedSegments: 3, patchedSegments: 3 });
+    expect(result.summary).toMatchObject({ nodes: 9, segments: 4, fittings: 1, terminals: 3, equipment: 1, terminalsWithCfm: { supply: 2, return: 0, exhaust: 0, "outside-air": 0 }, sizedSegments: 3, patchedSegments: 3 });
   });
   it("emits one apply_patch update per sized run with the diameter and the fully merged metadata", () => {
     const result = sizePascalScene(example());
@@ -47,7 +47,7 @@ describe("sizePascalScene", () => {
     const result = sizePascalScene(example());
     expect(result.findings.filter((finding) => finding.code === "undersized").map((finding) => finding.nodeId)).toEqual(["duct-segment_main", "duct-segment_run_a", "duct-segment_run_b"]);
     expect(result.findings[0]).toMatchObject({ severity: "error" });
-    expect(result.summary.findings).toEqual({ error: 3, warning: 0, info: 0 });
+    expect(result.summary.findings).toEqual({ error: 3, warning: 0, info: 1 });
   });
   it("skips diameter patches for runs already at the recommended size and for --no-resize", () => {
     const scene = example();
@@ -82,12 +82,25 @@ describe("sizePascalScene", () => {
     scene.nodes["duct-segment_run_b"]!.path = [[4.1905, 2.6, 0.5], [4.1905, 2.6, 3], [4.1905, -0.12, 3]];
     const result = sizePascalScene(scene);
     expect(result.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ code: "unsized-supply-segment", severity: "warning", nodeId: "duct-segment_orphan" }),
-      expect.objectContaining({ code: "unsized-supply-segment", severity: "warning", nodeId: "duct-segment_run_b" }),
+      expect.objectContaining({ code: "unsized-segment", severity: "warning", nodeId: "duct-segment_orphan" }),
+      expect.objectContaining({ code: "unsized-segment", severity: "warning", nodeId: "duct-segment_run_b" }),
       expect.objectContaining({ code: "no-equipment-path", severity: "error", nodeId: "duct-terminal_b" }),
     ]));
     expect(result.segments.find((segment) => segment.nodeId === "duct-segment_main")).toMatchObject({ cfm: 150 });
     expect(result.findings.some((finding) => finding.nodeId === "duct-segment_return")).toBe(false);
+  });
+  it("sizes the return drop once its grille has required CFM, with return velocity caps", () => {
+    const scene = example();
+    scene.nodes["duct-terminal_return"]!.metadata = { requiredCfm: 250 };
+    const result = sizePascalScene(scene);
+    const ret = result.segments.find((segment) => segment.nodeId === "duct-segment_return")!;
+    expect(ret).toMatchObject({ system: "return", cfm: 250, role: "main", terminalNodeIds: ["duct-terminal_return"], actualDiameterIn: 8 });
+    expect(ret.recommended).toEqual(sizeDuctForAirflow({ cfm: 250, role: "main", airflowType: "return" }));
+    expect(ret.comparison.maxVelocityFpm).toBe(1200);
+    expect(result.patches.find((patch) => patch.id === "duct-segment_return")?.data.diameter).toBe(ret.recommended.standardDiameterIn);
+    expect(result.summary.terminalsWithCfm).toMatchObject({ supply: 2, return: 1 });
+    const withoutCfm = sizePascalScene(example());
+    expect(withoutCfm.findings).toContainEqual(expect.objectContaining({ code: "missing-required-cfm", severity: "info", nodeId: "duct-terminal_return" }));
   });
   it("refuses to write diameters outside Pascal's schema range and says so", () => {
     const scene = example();

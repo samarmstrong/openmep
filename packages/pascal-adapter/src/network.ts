@@ -9,9 +9,10 @@ export type PascalFindingCode =
   | "invalid-required-cfm"
   | "unsupported-fitting-type"
   | "no-equipment-path"
+  | "mixed-system-segment"
   | "dangling-reference"
   | "detached-node"
-  | "unsized-supply-segment"
+  | "unsized-segment"
   | "undersized"
   | "oversized"
   | "shape-not-resized"
@@ -115,26 +116,28 @@ export function buildPascalNetwork(scene: PascalScene, options: BuildNetworkOpti
         break;
       case "duct-terminal": {
         const airflowType = terminalSystem(node);
+        const label = airflowType === "supply" ? "Supply terminal" : "Return grille";
         let requiredCfm: number | null = null;
-        if (airflowType === "supply") {
-          const reading = readCfm(node);
-          if (reading.kind === "present") requiredCfm = reading.cfm;
-          else if (reading.kind === "absent") {
-            findings.push({
-              code: "missing-required-cfm",
-              severity: "warning",
-              nodeId: node.id,
-              message: `Supply terminal ${node.id} has no required CFM in metadata; it does not contribute to sizing.`,
-            });
-          } else {
-            findings.push({
-              code: "invalid-required-cfm",
-              severity: "error",
-              nodeId: node.id,
-              message: `Supply terminal ${node.id} has a required CFM that is not a positive number.`,
-              detail: { raw: reading.raw },
-            });
-          }
+        const reading = readCfm(node);
+        if (reading.kind === "present") requiredCfm = reading.cfm;
+        else if (reading.kind === "absent") {
+          // Supply CFM is the design input; return runs are sized only when the user gives grille CFM.
+          findings.push({
+            code: "missing-required-cfm",
+            severity: airflowType === "supply" ? "warning" : "info",
+            nodeId: node.id,
+            message: airflowType === "supply"
+              ? `${label} ${node.id} has no required CFM in metadata; it does not contribute to sizing.`
+              : `${label} ${node.id} has no required CFM in metadata; its return run is left as drawn. Set metadata.requiredCfm to size it.`,
+          });
+        } else {
+          findings.push({
+            code: "invalid-required-cfm",
+            severity: "error",
+            nodeId: node.id,
+            message: `${label} ${node.id} has a required CFM that is not a positive number.`,
+            detail: { raw: reading.raw },
+          });
         }
         items.push({ id: node.id, elementRef: node.id, kind: "terminal", airflowType, connectedItemRefs, requiredCfm });
         break;
@@ -159,7 +162,7 @@ export function buildPascalNetwork(scene: PascalScene, options: BuildNetworkOpti
       code: "no-equipment",
       severity: "error",
       nodeId: null,
-      message: "Scene has no furnace or air handler; supply runs cannot be traced to equipment.",
+      message: "Scene has no furnace or air handler; runs cannot be traced to equipment.",
     });
   }
   return { items, ports, connections, findings };

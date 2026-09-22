@@ -21,17 +21,21 @@ export type {
 
 export {
   DuctNetworkError,
+  SIZED_AIRFLOW_TYPES,
+  recommendDuctSegments,
   recommendSupplyDuctSegments,
-} from "./supply-network.js";
+} from "./duct-network.js";
 export type {
   DuctNetworkErrorCode,
   DuctNetworkFinding,
   NetworkItem,
   NetworkNode,
+  DuctNetworkOptions,
+  DuctNetworkResult,
+  DuctSegmentRecommendation,
   NetworkSegment,
-  SupplyDuctNetworkResult,
-  SupplyDuctSegmentRecommendation,
-} from "./supply-network.js";
+  SizedAirflowType,
+} from "./duct-network.js";
 
 export {
   flatOvalEquivalentDiameterIn,
@@ -52,7 +56,7 @@ export type {
   RoundDuctSizeComparisonInput,
 } from "./size-comparison.js";
 
-export { NetworkInputError, readNetworkInput, sizeNetworkInput } from "./cli.js";
+export { NetworkInputError, parseNetworkInput, readNetworkInput, sizeNetworkInput, sizeSingleDuct } from "./cli.js";
 export type {
   ExistingSection,
   NetworkFinding,
@@ -62,4 +66,6 @@ export type {
   NetworkSegmentInput,
   NetworkSegmentSizing,
   NetworkSizingResult,
+  SingleDuctInput,
+  SingleDuctResult,
 } from "./cli.js";
