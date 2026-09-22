@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 - 2026-09-22
+
+- Return runs are sized: a `return-grille` with `metadata.requiredCfm` loads its return path to
+  the furnace or air handler, sized with return velocity caps and patched like supply runs. A
+  grille without CFM gets an `info` finding and its run is left as drawn.
+- **Breaking:** finding `unsized-supply-segment` is now `unsized-segment` (supply always; return
+  once any grille has CFM); `summary.supplyTerminalsWithCfm` is now `summary.terminalsWithCfm`.
+  Depends on `@openmep/hvac-domain` 0.4.0.
+
 ## 0.3.1 - 2026-09-16
 
 - `--help` as the first argument prints usage (exit 0) instead of being parsed as a command. Depends on `@openmep/hvac-domain` 0.3.1.

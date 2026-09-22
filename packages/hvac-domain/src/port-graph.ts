@@ -32,7 +32,7 @@ export class PortGraphError extends Error {
 /**
  * Connect items whose ports coincide within a tolerance. Host-agnostic: any
  * editor that can list its items' ports in one metric frame can rebuild
- * connectivity with this and feed the result to `recommendSupplyDuctSegments`.
+ * connectivity with this and feed the result to `recommendDuctSegments`.
  * Returns each item's sorted, de-duplicated connected item refs (never the
  * item itself). Items with no coincident ports are present with `[]`.
  */

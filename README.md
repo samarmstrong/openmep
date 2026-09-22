@@ -14,7 +14,8 @@ edit it without breaking it.
 
 | Workspace | What it does |
 |---|---|
-| `packages/hvac-domain` (`@openmep/hvac-domain`) | Dependency-free equal-friction round-duct sizing, supply-network CFM propagation, port-coincidence connectivity, ASHRAE equivalent diameters, and actual-vs-recommended size grading. `openmep-hvac size network.json` runs all of it on a JSON network with no editor. |
+| `packages/hvac-domain` (`@openmep/hvac-domain`) | Dependency-free equal-friction round-duct sizing, supply/return/exhaust network CFM propagation, port-coincidence connectivity, ASHRAE equivalent diameters, and actual-vs-recommended size grading. `openmep-hvac size network.json` runs all of it on a JSON network with no editor. |
+| `packages/mcp` (`@openmep/mcp`) | MCP server (`openmep-mcp`, stdio) exposing `size_duct` and `size_duct_network` to any agent, no editor needed. |
 | `packages/pascal-adapter` (`@openmep/pascal-adapter`) | Sizes and checks HVAC in [Pascal Editor](https://github.com/pascalorg/editor) scenes, live through Pascal's MCP (`openmep-pascal mcp size`: export, size, `apply_patch` as one undo step, verify) or offline on exported JSON. |
 | `skills/pascal-duct-sizing` | Agent skill (Pascal skills.sh format) that drives the adapter from an MCP-connected agent: gather CFM, set `metadata.requiredCfm`, run `openmep-pascal mcp size`, report, undo. `npx skills add samarmstrong/openmep --skill pascal-duct-sizing`. |
 | `packages/agent-benchmark` (`@openmep/agent-benchmark`) | Synthetic T1–T6 mechanical-plan editing benchmark (single + branching fixture sets), deterministic grader, `mep-benchmark` CLI (`grade`, `verify`, `size`), recorded results. |
@@ -29,6 +30,16 @@ exporter quirks the pipeline handles. No IFC is committed to this repository.
 
 ## Quick start
 
+### Give an agent a duct-sizing tool
+
+```sh
+claude mcp add openmep -- npx -y -p @openmep/mcp openmep-mcp
+```
+
+Any MCP client works (`{"command": "npx", "args": ["-y", "-p", "@openmep/mcp", "openmep-mcp"]}`).
+Describe the system in plain language, with the CFM each terminal needs, and the
+agent calls the engine; see `packages/mcp/README.md`.
+
 ### Size a duct network from JSON (no editor required)
 
 ```sh
@@ -41,7 +52,7 @@ From a checkout: `npm ci && npm run build --workspace @openmep/hvac-domain`, the
 
 The network is a list of equipment, fittings, terminals with engineer-supplied
 `requiredCfm`, and segments linked by `connectedItemRefs`. The result lists each
-supply run's CFM, role, recommended standard round diameter, velocity and friction
+run's system, CFM, role, recommended standard round diameter, velocity and friction
 rate, grades any existing section as `ok`/`undersized`/`oversized`, and reports
 terminals with no airflow or no path to equipment. Any host that can produce this
 document gets the same engine; `openmep-pascal items` produces it from a Pascal

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { DuctNetworkError, recommendSupplyDuctSegments, type NetworkItem } from "./supply-network.js";
+import { DuctNetworkError, recommendDuctSegments, recommendSupplyDuctSegments, type AirflowType, type NetworkItem } from "./duct-network.js";
 const node = (elementRef: string, kind: "equipment" | "fitting" | "terminal", connectedItemRefs: string[], requiredCfm?: number): NetworkItem => ({ id: `${elementRef}:edit`, elementRef, kind, airflowType: "supply", connectedItemRefs, requiredCfm });
 const segment = (elementRef: string, connectedItemRefs: string[]): NetworkItem => ({ id: `${elementRef}:edit`, elementRef, kind: "segment", airflowType: "supply", connectedItemRefs });
-describe("supply network propagation", () => {
+describe("duct network propagation", () => {
   it("accumulates runouts through branch and main as sorted JSON arrays", () => {
     const result = recommendSupplyDuctSegments([node("EQ", "equipment", ["MAIN"]), segment("MAIN", ["EQ", "FIT"]), node("FIT", "fitting", ["MAIN", "R1", "R2"]), segment("R1", ["FIT", "T1"]), node("T1", "terminal", ["R1"], 300), segment("R2", ["FIT", "T2"]), node("T2", "terminal", ["R2"], 200)]);
     expect(result.findings).toEqual([]); expect(result.segments.map((item) => item.elementRef)).toEqual(["MAIN", "R1", "R2"]);
@@ -41,5 +41,31 @@ describe("supply network propagation", () => {
     expect(() => recommendSupplyDuctSegments([
       node("EQ", "equipment", ["RUN"]), segment("RUN", ["EQ", "T"]), node("T", "terminal", ["RUN"], 200_000),
     ])).toThrow(expect.objectContaining({ code: "duct-sizing-failed", elementRef: "RUN" }));
+  });
+  it("sizes return runs to equipment with return velocity caps", () => {
+    const as = (item: NetworkItem, airflowType: AirflowType): NetworkItem => ({ ...item, airflowType });
+    const items = [
+      as(node("EQ", "equipment", ["S", "R"]), "unknown"),
+      segment("S", ["EQ", "ST"]), node("ST", "terminal", ["S"], 400),
+      as(segment("R", ["EQ", "RT"]), "return"), as(node("RT", "terminal", ["R"], 400), "return"),
+    ];
+    const result = recommendDuctSegments(items);
+    expect(result.findings).toEqual([]);
+    const supply = result.segments.find((item) => item.elementRef === "S")!;
+    const ret = result.segments.find((item) => item.elementRef === "R")!;
+    expect(ret).toMatchObject({ airflowType: "return", cfm: 400, role: "main", terminalItemIds: ["RT:edit"] });
+    expect(supply.airflowType).toBe("supply");
+    expect(ret.size.velocityFpm).toBeLessThanOrEqual(1200);
+    expect(recommendSupplyDuctSegments(items).segments.map((item) => item.elementRef)).toEqual(["S"]);
+    expect(recommendDuctSegments(items, { airflowTypes: ["return"] }).segments.map((item) => item.elementRef)).toEqual(["R"]);
+  });
+  it("refuses to size an unclassified segment shared by two systems", () => {
+    const as = (item: NetworkItem, airflowType: AirflowType): NetworkItem => ({ ...item, airflowType });
+    const result = recommendDuctSegments([
+      as(node("EQ", "equipment", ["X"]), "unknown"), as(segment("X", ["EQ", "ST", "RT"]), "unknown"),
+      node("ST", "terminal", ["X"], 200), as(node("RT", "terminal", ["X"], 200), "return"),
+    ]);
+    expect(result.segments).toEqual([]);
+    expect(result.findings).toContainEqual(expect.objectContaining({ code: "mixed-system-segment", elementRef: "X" }));
   });
 });

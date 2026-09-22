@@ -3,17 +3,19 @@ import { writeFile } from "node:fs/promises";
 import { flatOvalEquivalentDiameterIn, rectangularEquivalentDiameterIn } from "./equivalent-diameter.js";
 import { DuctSizingError, sizeDuctForAirflow, type AirflowType, type DuctRole, type RoundDuctSize } from "./round-duct.js";
 import { compareRoundDuctSize, type RoundDuctSizeComparison } from "./size-comparison.js";
-import { DuctNetworkError, recommendSupplyDuctSegments, type NetworkItem, type NetworkNode, type NetworkSegment } from "./supply-network.js";
+import { DuctNetworkError, SIZED_AIRFLOW_TYPES, recommendDuctSegments, type NetworkItem, type NetworkNode, type NetworkSegment, type SizedAirflowType } from "./duct-network.js";
 
 export const CLI_USAGE = [
   "usage:",
   "  openmep-hvac size <network.json|-> [--out file] [--pretty] [--fail-on-findings]",
-  "  openmep-hvac duct --cfm n [--role main|branch|runout] [--airflow supply|return|exhaust|outside-air] [--diameter-in n] [--pretty]",
+  "  openmep-hvac duct --cfm n [--role main|branch|runout] [--airflow supply|return|exhaust|outside-air]",
+  "                    [--diameter-in n | --width-in n --height-in n [--shape rect|oval]] [--pretty]",
   "",
-  "size  sizes every supply run of a duct network from terminal requiredCfm and grades any existing",
-  "      diameters. Input: a JSON array of NetworkItems, or { \"items\": [...] }. Segments may carry an",
-  "      optional existing section: diameterIn (round) or shape rect|oval with widthIn and heightIn.",
-  "duct  sizes one round duct for an airflow, optionally grading an existing diameter.",
+  "size  sizes every supply, return, exhaust, and outside-air run of a duct network from terminal",
+  "      requiredCfm and grades any existing sections. Input: a JSON array of NetworkItems, or",
+  "      { \"items\": [...] }. Segments may carry an optional existing section: diameterIn (round)",
+  "      or shape rect|oval with widthIn and heightIn.",
+  "duct  sizes one round duct for an airflow, optionally grading an existing round, rect, or oval section.",
   "No host, editor, or network connection is needed. Exit codes: 0 ok, 1 error findings with",
   "--fail-on-findings, 2 invalid input or engine error.",
 ].join("\n");
@@ -36,7 +38,7 @@ export type ExistingSection = { shape: "round"; diameterIn: number } | { shape: 
 export type NetworkSegmentInput = NetworkSegment & { existing?: ExistingSection };
 export type NetworkItemInput = NetworkNode | NetworkSegmentInput;
 
-export type NetworkFindingCode = "dangling-reference" | "no-equipment-path" | "missing-required-cfm" | "undersized" | "oversized";
+export type NetworkFindingCode = "dangling-reference" | "no-equipment-path" | "mixed-system-segment" | "missing-required-cfm" | "undersized" | "oversized";
 export type NetworkFinding = {
   code: NetworkFindingCode;
   severity: "error" | "warning" | "info";
@@ -47,6 +49,7 @@ export type NetworkFinding = {
 export type NetworkSegmentSizing = {
   itemId: string;
   elementRef: string;
+  airflowType: SizedAirflowType;
   cfm: number;
   role: DuctRole;
   terminalItemIds: readonly string[];
@@ -60,7 +63,8 @@ export type NetworkSizingResult = {
     segments: number;
     terminals: number;
     equipment: number;
-    supplyTerminalsWithCfm: number;
+    /** Terminals with requiredCfm, per system. */
+    terminalsWithCfm: Record<SizedAirflowType, number>;
     sizedSegments: number;
     findings: Record<"error" | "warning" | "info", number>;
   };
@@ -122,6 +126,11 @@ export function readNetworkInput(text: string): NetworkItemInput[] {
   } catch (error) {
     throw new NetworkInputError("invalid-json", null, `Input is not valid JSON: ${error instanceof Error ? error.message : String(error)}`);
   }
+  return parseNetworkInput(parsed);
+}
+
+/** Validate an already-parsed network document; see `readNetworkInput`. */
+export function parseNetworkInput(parsed: unknown): NetworkItemInput[] {
   const items = Array.isArray(parsed) ? parsed : isRecord(parsed) && Array.isArray(parsed.items) ? parsed.items : null;
   if (items === null) throw new NetworkInputError("invalid-item", null, "Input must be a JSON array of NetworkItems or an object with an items array.");
   return items.map((raw, index) => parseItem(raw, `items[${index}]`));
@@ -141,11 +150,13 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
     const { existing: _existing, ...segment } = item;
     return segment;
   });
-  const result = recommendSupplyDuctSegments(engineItems);
+  const result = recommendDuctSegments(engineItems);
   const findings: NetworkFinding[] = result.findings.map((finding) => ({ ...finding, severity: "error" as const }));
   for (const item of items) {
-    if (item.kind === "terminal" && item.airflowType === "supply" && item.requiredCfm == null) {
-      findings.push({ code: "missing-required-cfm", severity: "error", itemId: item.id, elementRef: item.elementRef, message: `Supply terminal ${item.elementRef} has no requiredCfm; it was not propagated.` });
+    if (item.kind === "terminal" && item.airflowType !== "unknown" && item.requiredCfm == null) {
+      // Supply CFM is the design input; other systems are sized only when the caller supplies their CFM.
+      const severity = item.airflowType === "supply" ? "error" : "warning";
+      findings.push({ code: "missing-required-cfm", severity, itemId: item.id, elementRef: item.elementRef, message: `${item.airflowType} terminal ${item.elementRef} has no requiredCfm; its runs were not sized.` });
     }
   }
   const byRef = new Map(items.map((item) => [item.elementRef, item]));
@@ -155,7 +166,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
     let graded: NetworkSegmentSizing["existing"] = null;
     if (existing !== undefined) {
       const actual = equivalentDiameterIn(existing);
-      const comparison = compareRoundDuctSize({ actualDiameterIn: actual, recommended: recommendation.size, airflowType: "supply", role: recommendation.role });
+      const comparison = compareRoundDuctSize({ actualDiameterIn: actual, recommended: recommendation.size, airflowType: recommendation.airflowType, role: recommendation.role });
       graded = { ...existing, equivalentDiameterIn: actual, comparison };
       const standard = recommendation.size.standardDiameterIn;
       if (comparison.status === "undersized") {
@@ -164,7 +175,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
         findings.push({ code: "oversized", severity: "info", itemId: recommendation.itemId, elementRef: recommendation.elementRef, message: `${recommendation.elementRef} carries ${round3(recommendation.cfm)} CFM at ${round3(actual)} in equivalent; ${standard} in round would suffice.` });
       }
     }
-    return { itemId: recommendation.itemId, elementRef: recommendation.elementRef, cfm: recommendation.cfm, role: recommendation.role, terminalItemIds: recommendation.terminalItemIds, recommended: recommendation.size, existing: graded };
+    return { itemId: recommendation.itemId, elementRef: recommendation.elementRef, airflowType: recommendation.airflowType, cfm: recommendation.cfm, role: recommendation.role, terminalItemIds: recommendation.terminalItemIds, recommended: recommendation.size, existing: graded };
   });
   findings.sort((a, b) => a.elementRef.localeCompare(b.elementRef) || a.code.localeCompare(b.code));
   const count = (severity: NetworkFinding["severity"]): number => findings.filter((finding) => finding.severity === severity).length;
@@ -174,7 +185,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
       segments: items.filter((item) => item.kind === "segment").length,
       terminals: items.filter((item) => item.kind === "terminal").length,
       equipment: items.filter((item) => item.kind === "equipment").length,
-      supplyTerminalsWithCfm: items.filter((item) => item.kind === "terminal" && item.airflowType === "supply" && item.requiredCfm != null).length,
+      terminalsWithCfm: Object.fromEntries(SIZED_AIRFLOW_TYPES.map((system) => [system, items.filter((item) => item.kind === "terminal" && item.airflowType === system && item.requiredCfm != null).length])) as Record<SizedAirflowType, number>,
       sizedSegments: segments.length,
       findings: { error: count("error"), warning: count("warning"), info: count("info") },
     },
@@ -183,7 +194,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
   };
 }
 
-const VALUE_FLAGS = ["out", "cfm", "role", "airflow", "diameter-in"] as const;
+const VALUE_FLAGS = ["out", "cfm", "role", "airflow", "diameter-in", "width-in", "height-in", "shape"] as const;
 const BOOLEAN_FLAGS = ["pretty", "fail-on-findings", "help"] as const;
 type Flags = Map<string, string | true>;
 
@@ -220,17 +231,39 @@ function numberFlag(flags: Flags, name: string): number | undefined {
   return value;
 }
 
-function runDuct(flags: Flags): unknown {
+export type SingleDuctInput = { cfm: number; role?: DuctRole; airflowType?: SizedAirflowType; existing?: ExistingSection | null };
+export type SingleDuctResult = {
+  input: { cfm: number; role: DuctRole; airflowType: SizedAirflowType; existing: ExistingSection | null };
+  recommended: RoundDuctSize;
+  /** Present when `existing` was given; rect and oval are graded by ASHRAE circular equivalent. */
+  existing: { equivalentDiameterIn: number; comparison: RoundDuctSizeComparison } | null;
+};
+
+/** Size one round duct for an airflow and optionally grade an existing section. */
+export function sizeSingleDuct(input: SingleDuctInput): SingleDuctResult {
+  const { cfm, role = "main", airflowType = "supply" } = input;
+  if (!ROLES.includes(role)) throw new NetworkInputError("invalid-argument", "role", `role must be one of ${ROLES.join(", ")}.`);
+  if (!SIZED_AIRFLOW_TYPES.includes(airflowType)) throw new NetworkInputError("invalid-argument", "airflowType", `airflowType must be one of ${SIZED_AIRFLOW_TYPES.join(", ")}.`);
+  const existing = input.existing == null ? null : parseExisting(input.existing, "existing");
+  const recommended = sizeDuctForAirflow({ cfm, role, airflowType });
+  if (existing === null) return { input: { cfm, role, airflowType, existing }, recommended, existing: null };
+  const equivalent = equivalentDiameterIn(existing);
+  const comparison = compareRoundDuctSize({ actualDiameterIn: equivalent, recommended, airflowType, role });
+  return { input: { cfm, role, airflowType, existing }, recommended, existing: { equivalentDiameterIn: equivalent, comparison } };
+}
+
+function runDuct(flags: Flags): SingleDuctResult {
   const cfm = numberFlag(flags, "cfm");
   if (cfm === undefined) throw new NetworkInputError("invalid-argument", null, "duct needs --cfm.");
-  const role = (flags.get("role") ?? "main") as DuctRole;
-  if (!ROLES.includes(role)) throw new NetworkInputError("invalid-argument", null, `--role must be one of ${ROLES.join(", ")}.`);
-  const airflowType = (flags.get("airflow") ?? "supply") as AirflowType;
-  if (!AIRFLOW_TYPES.includes(airflowType) || airflowType === "unknown") throw new NetworkInputError("invalid-argument", null, "--airflow must be supply, return, exhaust, or outside-air.");
-  const recommended = sizeDuctForAirflow({ cfm, role, airflowType });
+  const role = flags.get("role") as DuctRole | undefined;
+  const airflowType = flags.get("airflow") as SizedAirflowType | undefined;
   const diameterIn = numberFlag(flags, "diameter-in");
-  const comparison = diameterIn === undefined ? null : compareRoundDuctSize({ actualDiameterIn: diameterIn, recommended, airflowType, role });
-  return { input: { cfm, role, airflowType, diameterIn: diameterIn ?? null }, recommended, comparison };
+  const widthIn = numberFlag(flags, "width-in");
+  const heightIn = numberFlag(flags, "height-in");
+  const shape = flags.get("shape") ?? (widthIn !== undefined || heightIn !== undefined ? "rect" : undefined);
+  if (diameterIn !== undefined && shape !== undefined) throw new NetworkInputError("invalid-argument", null, "Give --diameter-in or --width-in/--height-in, not both.");
+  const existing = diameterIn !== undefined ? { shape: "round", diameterIn } : shape !== undefined ? { shape, widthIn, heightIn } : null;
+  return sizeSingleDuct({ cfm, role, airflowType, existing: existing as ExistingSection | null });
 }
 
 type Io = { stdout: (text: string) => void; stderr: (text: string) => void };

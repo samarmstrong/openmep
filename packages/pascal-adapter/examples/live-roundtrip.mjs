@@ -48,7 +48,7 @@ try {
   const outcome = await sizeThroughPascalMcp(session);
   console.log(`findings: ${outcome.result.findings.map((finding) => `${finding.severity}:${finding.code}:${finding.nodeId ?? ""}`).join(", ")}`);
   check("three segments patched in one batch", outcome.applied?.appliedOps === 3, outcome.applied);
-  check("no unsized supply segment", !outcome.result.findings.some((finding) => finding.code === "unsized-supply-segment"));
+  check("no unsized segment", !outcome.result.findings.some((finding) => finding.code === "unsized-segment"));
   check("verification after re-export", outcome.verification?.ok === true, outcome.verification);
   check("persisted to the bound project", outcome.applied?.persistence === null, outcome.applied?.persistence);
   const after = await diameters();
@@ -63,6 +63,15 @@ try {
 
   const second = await sizeThroughPascalMcp(session);
   check("second pass has nothing to patch", second.result.patches.length === 0 && second.applied === null, second.result.summary);
+
+  // Return side: give the grille CFM, and the return drop is sized like a supply run.
+  const grille = (await session.exportScene()).hvacNodes.get("duct-terminal_return");
+  const cfmSet = await session.applyPatch([{ op: "update", id: "duct-terminal_return", data: { metadata: { ...grille.metadata, requiredCfm: 250 } } }]);
+  check("return grille CFM set in one batch", cfmSet.appliedOps === 1, cfmSet);
+  const returned = await sizeThroughPascalMcp(session);
+  const drop = returned.result.segments.find((segment) => segment.nodeId === "duct-segment_return");
+  check("return drop sized 8 -> 9 in with return velocity caps", drop?.patchedDiameterIn === 9 && drop.comparison.maxVelocityFpm === 1200 && returned.applied?.appliedOps === 1, drop && { patchedDiameterIn: drop.patchedDiameterIn, maxVelocityFpm: drop.comparison.maxVelocityFpm });
+  check("return verification after re-export", returned.verification?.ok === true && (await diameters())["duct-segment_return"] === 9, returned.verification);
 } finally {
   await session.close();
 }

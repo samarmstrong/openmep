@@ -1,13 +1,15 @@
 import {
   compareRoundDuctSize,
   flatOvalEquivalentDiameterIn,
-  recommendSupplyDuctSegments,
+  recommendDuctSegments,
   rectangularEquivalentDiameterIn,
   roundDuctFrictionRate,
   roundDuctVelocityFpm,
+  SIZED_AIRFLOW_TYPES,
   type DuctRole,
   type RoundDuctSize,
   type RoundDuctSizeComparison,
+  type SizedAirflowType,
 } from "@openmep/hvac-domain";
 import { buildPascalNetwork, type BuildNetworkOptions, type PascalFinding, type PascalNetwork } from "./network.js";
 import { readPascalScene, type DuctShape, type PascalDuctSegment, type PascalScene, type PascalSystem } from "./scene.js";
@@ -51,7 +53,8 @@ export type PascalSizingSummary = {
   fittings: number;
   terminals: number;
   equipment: number;
-  supplyTerminalsWithCfm: number;
+  /** Terminals with required CFM, per system (Pascal draws supply and return). */
+  terminalsWithCfm: Record<SizedAirflowType, number>;
   sizedSegments: number;
   patchedSegments: number;
   /** Patches emitted, including metadata-only updates. */
@@ -91,7 +94,7 @@ export function sizePascalNetwork(scene: PascalScene, network: PascalNetwork, op
   const metadataKey = options.metadataKey ?? DEFAULT_METADATA_KEY;
   const resizeRound = options.resizeRound ?? true;
   const findings: PascalFinding[] = [...network.findings];
-  const result = recommendSupplyDuctSegments(network.items);
+  const result = recommendDuctSegments(network.items, { airflowTypes: ["supply", "return"] });
   for (const finding of result.findings) {
     findings.push({ code: finding.code, severity: "error", nodeId: finding.elementRef, message: finding.message });
   }
@@ -101,7 +104,7 @@ export function sizePascalNetwork(scene: PascalScene, network: PascalNetwork, op
     const node = scene.hvacNodes.get(recommendation.elementRef);
     if (node?.type !== "duct-segment") continue;
     const actual = actualDiameterIn(node);
-    const comparison = compareRoundDuctSize({ actualDiameterIn: actual, recommended: recommendation.size, airflowType: "supply", role: recommendation.role });
+    const comparison = compareRoundDuctSize({ actualDiameterIn: actual, recommended: recommendation.size, airflowType: recommendation.airflowType, role: recommendation.role });
     const standard = recommendation.size.standardDiameterIn;
     let patchedDiameterIn: number | null = null;
     if (comparison.status === "undersized") {
@@ -175,13 +178,16 @@ export function sizePascalNetwork(scene: PascalScene, network: PascalNetwork, op
     });
   }
   const sizedIds = new Set(segments.map((segment) => segment.nodeId));
+  // Supply runs should always size; return runs only once the user has given some grille CFM.
+  const expected = new Set<PascalSystem>(["supply"]);
+  if (network.items.some((item) => item.kind === "terminal" && item.airflowType === "return" && item.requiredCfm != null)) expected.add("return");
   for (const node of [...scene.hvacNodes.values()].sort((a, b) => a.id.localeCompare(b.id))) {
-    if (node.type === "duct-segment" && node.system === "supply" && !sizedIds.has(node.id)) {
+    if (node.type === "duct-segment" && expected.has(node.system) && !sizedIds.has(node.id)) {
       findings.push({
-        code: "unsized-supply-segment",
+        code: "unsized-segment",
         severity: "warning",
         nodeId: node.id,
-        message: `${node.id} is a supply run on no path from a terminal with required CFM to equipment; check its connections.`,
+        message: `${node.id} is a ${node.system} run on no path from a terminal with required CFM to equipment; check its connections.`,
       });
     }
   }
@@ -201,7 +207,7 @@ export function sizePascalNetwork(scene: PascalScene, network: PascalNetwork, op
       fittings: items.filter((item) => item.kind === "fitting").length,
       terminals: items.filter((item) => item.kind === "terminal").length,
       equipment: items.filter((item) => item.kind === "equipment").length,
-      supplyTerminalsWithCfm: items.filter((item) => item.kind === "terminal" && item.airflowType === "supply" && item.requiredCfm != null).length,
+      terminalsWithCfm: Object.fromEntries(SIZED_AIRFLOW_TYPES.map((system) => [system, items.filter((item) => item.kind === "terminal" && item.airflowType === system && item.requiredCfm != null).length])) as Record<SizedAirflowType, number>,
       sizedSegments: segments.length,
       patchedSegments: segments.filter((segment) => segment.patchedDiameterIn !== null).length,
       patches: patches.length,

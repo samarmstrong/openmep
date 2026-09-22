@@ -22,12 +22,14 @@ npx openmep-pascal size scene.json --pretty
 2. Rebuilds connectivity from **port coincidence** (5 cm, supply and return
    kept apart), re-implementing Pascal's port geometry for the four HVAC kinds
    so no editor runtime is needed.
-3. Reads engineer-approved airflow per supply terminal from
+3. Reads engineer-approved airflow per terminal (supply register, diffuser,
+   or return grille) from
    `metadata.requiredCfm` (also `metadata.openmep.requiredCfm` or
    `metadata.cfm`; the key is configurable).
-4. Sizes every supply run on a path from a terminal to a furnace or air
-   handler with `@openmep/hvac-domain` (`recommendSupplyDuctSegments`, equal
-   friction at 0.08 in. w.g./100 ft with role-based velocity caps).
+4. Sizes every supply and return run on a path from a terminal with CFM to a
+   furnace or air handler with `@openmep/hvac-domain` (`recommendDuctSegments`,
+   equal friction at 0.08 in. w.g./100 ft with role-based velocity caps per
+   system).
 5. Grades each run's actual size against the recommendation and emits
    **findings** plus an `apply_patch` batch that sets round
    `duct-segment.diameter` to the standard size and records CFM, velocity,
@@ -119,21 +121,22 @@ stages separately. Errors are typed: `PascalAdapterError` (`invalid-json`,
 | code | severity | meaning |
 |---|---|---|
 | `undersized` | error | actual (or equivalent) diameter is below the exact required diameter |
-| `no-equipment-path` | error | a supply terminal with CFM has no compatible path to a furnace / air handler |
+| `no-equipment-path` | error | a terminal with CFM has no same-system path to a furnace / air handler |
 | `no-equipment` | error | the scene has no furnace or air handler |
 | `invalid-required-cfm` | error | CFM metadata present but not a positive number |
 | `diameter-out-of-host-range` | error | recommended size is outside Pascal's 2–48 in `duct-segment.diameter` range |
 | `dangling-reference` | error | internal consistency failure from the engine |
-| `unsized-supply-segment` | warning | a supply run on no terminal-to-equipment path (orphan or disconnected) |
-| `missing-required-cfm` | warning | supply terminal without CFM metadata; it does not contribute |
+| `mixed-system-segment` | error | internal consistency failure: one run loaded by supply and return |
+| `unsized-segment` | warning | a supply run (or a return run, once any grille has CFM) on no terminal-to-equipment path |
+| `missing-required-cfm` | warning / info | supply terminal (warning) or return grille (info) without CFM metadata; it does not contribute |
 | `oversized` | info | at least one full standard size above the recommendation |
 | `shape-not-resized` | info | rect / oval run graded but left as drawn |
 | `unsupported-fitting-type` | info | fitting kind this adapter does not know; treated as unconnected |
 
 ## Scope and limitations
 
-- Sizes the **supply** side only. Return runs are recognised and kept apart
-  but not sized; equipment is compatible with both sides.
+- Supply runs always size; return runs size once their grilles have CFM
+  (return air is not derived from supply). Equipment is shared by both sides.
 - Only **round** runs are resized. Rect and flat-oval runs are graded by their
   ASHRAE circular equivalent and get metadata only.
 - HVAC nodes must be reachable from the scene's `rootNodeIds` (normally a

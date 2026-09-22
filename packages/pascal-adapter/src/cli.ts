@@ -15,7 +15,7 @@ export const CLI_USAGE = [
   "  openmep-pascal mcp size   [connection] [--dry-run] [--no-verify] [sizing flags as for size]",
   "  openmep-pascal mcp export [connection] [--out file] [--pretty]",
   "",
-  "size   sizes supply runs from terminal metadata.requiredCfm and prints findings plus an apply_patch batch.",
+  "size   sizes supply and return runs from terminal metadata.requiredCfm and prints findings plus an apply_patch batch.",
   "items  prints the scene as @openmep/hvac-domain NetworkItems for grading or other engines.",
   "mcp    talks to a running Pascal editor over its MCP server: export_json, size, apply_patch (one undo step), re-export to verify.",
   "",
