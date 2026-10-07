@@ -1,0 +1,34 @@
+{
+  "$comment": "ACCA Manual D friction-rate worksheet example (brochure 'Manual D calculation', hosted by AHRI). Blower 1200 CFM at 0.70 in. w.g.; device losses sum to 0.50; the brochure gives TEL 200 ft and FR 0.10. Run lengths and fitting equivalent lengths are illustrative values that reproduce those totals; the brochure prints only the totals. Replace every number with your own job.",
+  "blower": { "designCfm": 1200, "externalStaticInWg": 0.70 },
+  "deviceLossesInWg": { "dx-coil": 0.23, "filter": 0.18, "supply-outlet": 0.03, "return-grille": 0.03, "balancing-damper": 0.03 },
+  "supply": {
+    "trunk": { "lengthFt": 25, "fittingEquivalentLengthFt": 20 },
+    "runs": [
+      { "room": "Bedroom 1",   "cfm": 150,   "lengthFt": 30, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 8 },
+      { "room": "Closet",      "cfm": 15,    "lengthFt": 10, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 4 },
+      { "room": "Bedroom 2 a", "cfm": 50,    "lengthFt": 25, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Bedroom 2 b", "cfm": 50,    "lengthFt": 25, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Bedroom 3",   "cfm": 100,   "lengthFt": 40, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 7 },
+      { "room": "Living a",    "cfm": 137.5, "lengthFt": 20, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 8 },
+      { "room": "Living b",    "cfm": 137.5, "lengthFt": 20, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 8 },
+      { "room": "Den",         "cfm": 125,   "lengthFt": 30, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 8 },
+      { "room": "Dining a",    "cfm": 62.5,  "lengthFt": 15, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Dining b",    "cfm": 62.5,  "lengthFt": 15, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Foyer",       "cfm": 80,    "lengthFt": 12, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Kitchen a",   "cfm": 62.5,  "lengthFt": 18, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Kitchen b",   "cfm": 62.5,  "lengthFt": 18, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Bath 1",      "cfm": 65,    "lengthFt": 22, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 6 },
+      { "room": "Bath 2",      "cfm": 40,    "lengthFt": 14, "fittingEquivalentLengthFt": 35, "softwareDiameterIn": 5 }
+    ]
+  },
+  "return": {
+    "trunk": { "lengthFt": 20, "fittingEquivalentLengthFt": 30 },
+    "runs": [
+      { "room": "Bedroom 1", "cfm": 150, "lengthFt": 20, "fittingEquivalentLengthFt": 10 },
+      { "room": "Bedroom 2", "cfm": 100, "lengthFt": 15, "fittingEquivalentLengthFt": 10 },
+      { "room": "Bedroom 3", "cfm": 100, "lengthFt": 18, "fittingEquivalentLengthFt": 10 },
+      { "room": "Living",    "cfm": 275, "lengthFt": 12, "fittingEquivalentLengthFt": 10 }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "openmep-manual-d-demo",
+  "private": true,
+  "type": "module",
+  "description": "Manual D friction-rate duct sizing from a worksheet, using @openmep/hvac-domain.",
+  "scripts": {
+    "start": "node demo.mjs"
+  },
+  "dependencies": {
+    "@openmep/hvac-domain": "^0.6.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
