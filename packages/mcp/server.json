@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.samarmstrong/openmep",
   "title": "OpenMEP duct sizing",
-  "description": "Deterministic HVAC duct sizing: size one run or a supply/return network at a fixed friction rate or one derived from fan static pressure (Manual D), grade existing sections.",
+  "description": "Deterministic HVAC duct sizing at a fixed or Manual D friction rate; grades existing ducts.",
   "repository": {
     "url": "https://github.com/samarmstrong/openmep",
     "source": "github",
