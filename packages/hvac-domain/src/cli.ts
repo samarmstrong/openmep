@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { flatOvalEquivalentDiameterIn, rectangularEquivalentDiameterIn } from "./equivalent-diameter.js";
-import { DuctSizingError, sizeDuctForAirflow, type AirflowType, type DuctRole, type RoundDuctSize } from "./round-duct.js";
+import { DEFAULT_FRICTION_RATE_PER_100FT, DuctSizingError, sizeDuctForAirflow, type AirflowType, type DuctRole, type RoundDuctSize } from "./round-duct.js";
 import { compareRoundDuctSize, type RoundDuctSizeComparison } from "./size-comparison.js";
-import { DuctNetworkError, SIZED_AIRFLOW_TYPES, recommendDuctSegments, type NetworkItem, type NetworkNode, type NetworkSegment, type SizedAirflowType } from "./duct-network.js";
+import { DuctNetworkError, SIZED_AIRFLOW_TYPES, recommendDuctSegments, type DesignFrictionRate, type FanStatic, type NetworkItem, type NetworkNode, type NetworkSegment, type SizedAirflowType } from "./duct-network.js";
 
 export const CLI_USAGE = [
   "usage:",
@@ -13,8 +13,10 @@ export const CLI_USAGE = [
   "",
   "size  sizes every supply, return, exhaust, and outside-air run of a duct network from terminal",
   "      requiredCfm and grades any existing sections. Input: a JSON array of NetworkItems, or",
-  "      { \"items\": [...] }. Segments may carry an optional existing section: diameterIn (round)",
-  "      or shape rect|oval with widthIn and heightIn.",
+  "      { \"items\": [...], \"fan\"?: { externalStaticInWg, componentLossesInWg? } }. Segments may carry",
+  "      an optional existing section (diameterIn, or shape rect|oval with widthIn and heightIn) and",
+  "      lengthFt; fittings may carry equivalentLengthFt. With fan, the friction rate is derived from",
+  "      available static pressure over the total effective length (Manual D) instead of 0.08.",
   "duct  sizes one round duct for an airflow, optionally grading an existing round, rect, or oval section.",
   "No host, editor, or network connection is needed. Exit codes: 0 ok, 1 error findings with",
   "--fail-on-findings, 2 invalid input or engine error.",
@@ -38,7 +40,17 @@ export type ExistingSection = { shape: "round"; diameterIn: number } | { shape: 
 export type NetworkSegmentInput = NetworkSegment & { existing?: ExistingSection };
 export type NetworkItemInput = NetworkNode | NetworkSegmentInput;
 
-export type NetworkFindingCode = "dangling-reference" | "no-equipment-path" | "mixed-system-segment" | "missing-required-cfm" | "undersized" | "oversized";
+export type NetworkFindingCode =
+  | "dangling-reference"
+  | "no-equipment-path"
+  | "mixed-system-segment"
+  | "missing-required-cfm"
+  | "undersized"
+  | "oversized"
+  | "friction-rate-out-of-range"
+  | "missing-equivalent-length";
+/** A parsed network document: items plus optional blower data. */
+export type NetworkDocument = { items: NetworkItemInput[]; fan: FanStatic | null };
 export type NetworkFinding = {
   code: NetworkFindingCode;
   severity: "error" | "warning" | "info";
@@ -58,6 +70,8 @@ export type NetworkSegmentSizing = {
   existing: (ExistingSection & { equivalentDiameterIn: number; comparison: RoundDuctSizeComparison }) | null;
 };
 export type NetworkSizingResult = {
+  /** Friction-rate derivation when the document had `fan`; otherwise null and the fixed default rate was used. */
+  design: DesignFrictionRate | null;
   summary: {
     items: number;
     segments: number;
@@ -66,6 +80,7 @@ export type NetworkSizingResult = {
     /** Terminals with requiredCfm, per system. */
     terminalsWithCfm: Record<SizedAirflowType, number>;
     sizedSegments: number;
+    frictionRatePer100ft: number;
     findings: Record<"error" | "warning" | "info", number>;
   };
   findings: readonly NetworkFinding[];
@@ -108,9 +123,17 @@ function parseItem(raw: unknown, path: string): NetworkItemInput {
   if (kind === "segment") {
     const segment: NetworkSegmentInput = { ...base, kind };
     if (raw.existing !== undefined) segment.existing = parseExisting(raw.existing, `${path}.existing`);
+    if (raw.lengthFt !== undefined && raw.lengthFt !== null) {
+      if (typeof raw.lengthFt !== "number" || !Number.isFinite(raw.lengthFt) || raw.lengthFt < 0) fail(`${path}.lengthFt`, "must be a finite non-negative number of feet.");
+      segment.lengthFt = raw.lengthFt;
+    }
     return segment;
   }
   const node: NetworkNode = { ...base, kind };
+  if (raw.equivalentLengthFt !== undefined && raw.equivalentLengthFt !== null) {
+    if (typeof raw.equivalentLengthFt !== "number" || !Number.isFinite(raw.equivalentLengthFt) || raw.equivalentLengthFt < 0) fail(`${path}.equivalentLengthFt`, "must be a finite non-negative number of feet.");
+    node.equivalentLengthFt = raw.equivalentLengthFt;
+  }
   if (raw.requiredCfm !== undefined && raw.requiredCfm !== null) {
     if (typeof raw.requiredCfm !== "number" || !Number.isFinite(raw.requiredCfm)) fail(`${path}.requiredCfm`, "must be a finite number of CFM.");
     node.requiredCfm = raw.requiredCfm;
@@ -118,22 +141,52 @@ function parseItem(raw: unknown, path: string): NetworkItemInput {
   return node;
 }
 
-/** Parse and validate a network document: a JSON array of items or `{ items: [...] }`. */
+/** Parse and validate a network document's items: a JSON array of items or `{ items: [...] }`. */
 export function readNetworkInput(text: string): NetworkItemInput[] {
+  return readNetworkDocument(text).items;
+}
+
+/** Parse and validate a network document text: a JSON array of items or `{ items, fan? }`. */
+export function readNetworkDocument(text: string): NetworkDocument {
   let parsed: unknown;
   try {
     parsed = JSON.parse(text);
   } catch (error) {
     throw new NetworkInputError("invalid-json", null, `Input is not valid JSON: ${error instanceof Error ? error.message : String(error)}`);
   }
-  return parseNetworkInput(parsed);
+  return parseNetworkDocument(parsed);
 }
 
-/** Validate an already-parsed network document; see `readNetworkInput`. */
+/** Size a parsed document: items with the document's fan, if any. */
+export function sizeNetworkDocument(document: NetworkDocument): NetworkSizingResult {
+  return sizeNetworkInput(document.items, { fan: document.fan });
+}
+
+/** Validate an already-parsed network document's items; see `readNetworkInput`. */
 export function parseNetworkInput(parsed: unknown): NetworkItemInput[] {
+  return parseNetworkDocument(parsed).items;
+}
+
+function parseFan(raw: unknown): FanStatic {
+  if (!isRecord(raw)) fail("fan", "must be an object with externalStaticInWg.");
+  if (!isPositive(raw.externalStaticInWg)) fail("fan.externalStaticInWg", "must be a positive number of in. w.g.");
+  const fan: FanStatic = { externalStaticInWg: raw.externalStaticInWg };
+  if (raw.componentLossesInWg !== undefined && raw.componentLossesInWg !== null) {
+    if (!isRecord(raw.componentLossesInWg)) fail("fan.componentLossesInWg", "must be an object of device name → in. w.g.");
+    for (const [name, loss] of Object.entries(raw.componentLossesInWg)) {
+      if (typeof loss !== "number" || !Number.isFinite(loss) || loss < 0) fail(`fan.componentLossesInWg.${name}`, "must be a finite non-negative number of in. w.g.");
+    }
+    fan.componentLossesInWg = raw.componentLossesInWg as Record<string, number>;
+  }
+  return fan;
+}
+
+/** Validate an already-parsed network document: a JSON array of items, or `{ items, fan? }`. */
+export function parseNetworkDocument(parsed: unknown): NetworkDocument {
   const items = Array.isArray(parsed) ? parsed : isRecord(parsed) && Array.isArray(parsed.items) ? parsed.items : null;
   if (items === null) throw new NetworkInputError("invalid-item", null, "Input must be a JSON array of NetworkItems or an object with an items array.");
-  return items.map((raw, index) => parseItem(raw, `items[${index}]`));
+  const fan = isRecord(parsed) && parsed.fan !== undefined && parsed.fan !== null ? parseFan(parsed.fan) : null;
+  return { items: items.map((raw, index) => parseItem(raw, `items[${index}]`)), fan };
 }
 
 function equivalentDiameterIn(existing: ExistingSection): number {
@@ -144,14 +197,17 @@ function equivalentDiameterIn(existing: ExistingSection): number {
 const round3 = (value: number): number => Math.round(value * 1000) / 1000;
 
 /** Size a validated network and grade existing sections. Host-agnostic: no scene, no editor. */
-export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSizingResult {
+export type NetworkSizingOptions = { fan?: FanStatic | null };
+const WARNING_CODES: ReadonlySet<NetworkFindingCode> = new Set(["friction-rate-out-of-range", "missing-equivalent-length"]);
+
+export function sizeNetworkInput(items: readonly NetworkItemInput[], options: NetworkSizingOptions = {}): NetworkSizingResult {
   const engineItems: NetworkItem[] = items.map((item) => {
     if (item.kind !== "segment") return item;
     const { existing: _existing, ...segment } = item;
     return segment;
   });
-  const result = recommendDuctSegments(engineItems);
-  const findings: NetworkFinding[] = result.findings.map((finding) => ({ ...finding, severity: "error" as const }));
+  const result = recommendDuctSegments(engineItems, { fan: options.fan ?? null });
+  const findings: NetworkFinding[] = result.findings.map((finding) => ({ ...finding, severity: WARNING_CODES.has(finding.code) ? ("warning" as const) : ("error" as const) }));
   for (const item of items) {
     if (item.kind === "terminal" && item.airflowType !== "unknown" && item.requiredCfm == null) {
       // Supply CFM is the design input; other systems are sized only when the caller supplies their CFM.
@@ -180,6 +236,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
   findings.sort((a, b) => a.elementRef.localeCompare(b.elementRef) || a.code.localeCompare(b.code));
   const count = (severity: NetworkFinding["severity"]): number => findings.filter((finding) => finding.severity === severity).length;
   return {
+    design: result.design,
     summary: {
       items: items.length,
       segments: items.filter((item) => item.kind === "segment").length,
@@ -187,6 +244,7 @@ export function sizeNetworkInput(items: readonly NetworkItemInput[]): NetworkSiz
       equipment: items.filter((item) => item.kind === "equipment").length,
       terminalsWithCfm: Object.fromEntries(SIZED_AIRFLOW_TYPES.map((system) => [system, items.filter((item) => item.kind === "terminal" && item.airflowType === system && item.requiredCfm != null).length])) as Record<SizedAirflowType, number>,
       sizedSegments: segments.length,
+      frictionRatePer100ft: result.design?.frictionRatePer100ft ?? DEFAULT_FRICTION_RATE_PER_100FT,
       findings: { error: count("error"), warning: count("warning"), info: count("info") },
     },
     findings,
@@ -291,7 +349,7 @@ export async function runCli(argv: readonly string[], io: Io = { stdout: (t) => 
     if (command !== "size") throw new NetworkInputError("invalid-argument", null, `Unknown command ${command}.\n${CLI_USAGE}`);
     if (positionals.length !== 1) throw new NetworkInputError("invalid-argument", null, "size needs exactly one network path, or - for stdin.");
     const path = positionals[0]!;
-    const result = sizeNetworkInput(readNetworkInput(readFileSync(path === "-" ? 0 : path, "utf8")));
+    const result = sizeNetworkDocument(readNetworkDocument(readFileSync(path === "-" ? 0 : path, "utf8")));
     await emit(result);
     return flags.get("fail-on-findings") === true && result.summary.findings.error > 0 ? 1 : 0;
   } catch (error) {

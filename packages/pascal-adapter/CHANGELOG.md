@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 - 2026-10-07
+
+- `openmep-pascal items` emits each duct segment's `lengthFt` from its Pascal path (level-local
+  metres → feet), so the exported network can be sized from fan static pressure with
+  `openmep-hvac size` or `openmep.sizeNetwork` once `fan` and fitting equivalent lengths are added.
+  Pascal scenes carry no static-pressure data, so `openmep-pascal mcp size` still uses the fixed rate.
+  Depends on `@openmep/hvac-domain` 0.6.0.
+
 ## 0.4.0 - 2026-09-22
 
 - Return runs are sized: a `return-grille` with `metadata.requiredCfm` loads its return path to

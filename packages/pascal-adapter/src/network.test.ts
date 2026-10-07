@@ -26,6 +26,7 @@ describe("buildPascalNetwork", () => {
     expect(byRef.get("duct-terminal_a")).toMatchObject({ kind: "terminal", airflowType: "supply", requiredCfm: 150 });
     expect(byRef.get("duct-terminal_return")).toMatchObject({ kind: "terminal", airflowType: "return", requiredCfm: null });
     expect(byRef.get("duct-segment_return")).toMatchObject({ kind: "segment", airflowType: "return" });
+    expect((byRef.get("duct-segment_return") as { lengthFt?: number }).lengthFt).toBeGreaterThan(0);
     expect(byRef.get("duct-fitting_tee")).toMatchObject({ kind: "fitting", airflowType: "supply" });
     expect(network.items.map((item) => item.id)).toEqual([...network.items.map((item) => item.id)].sort());
   });

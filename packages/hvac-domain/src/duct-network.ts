@@ -1,4 +1,4 @@
-import { DuctSizingError, sizeDuctForAirflow, type AirflowType, type DuctRole, type RoundDuctSize } from "./round-duct.js";
+import { DEFAULT_FRICTION_RATE_PER_100FT, DuctSizingError, sizeDuctForAirflow, type AirflowType, type DuctRole, type RoundDuctSize } from "./round-duct.js";
 
 export type { AirflowType } from "./round-duct.js";
 /** Airflow systems the network engine propagates and sizes. */
@@ -12,6 +12,8 @@ export type NetworkNode = {
   airflowType: AirflowType;
   connectedItemRefs: readonly string[];
   requiredCfm?: number | null;
+  /** Fittings and terminals: equivalent length of straight duct for this fitting's loss, ft (Manual D style). Counted in effective length when `fan` is given. */
+  equivalentLengthFt?: number | null;
 };
 export type NetworkSegment = {
   id: string;
@@ -19,10 +21,18 @@ export type NetworkSegment = {
   kind: "segment";
   airflowType: AirflowType;
   connectedItemRefs: readonly string[];
+  /** Measured straight length, ft. Required on every sized segment when `fan` is given. */
+  lengthFt?: number | null;
 };
 export type NetworkItem = NetworkNode | NetworkSegment;
 
-export type DuctNetworkErrorCode = "duplicate-element-ref" | "duct-sizing-failed" | "invalid-terminal-airflow";
+export type DuctNetworkErrorCode =
+  | "duplicate-element-ref"
+  | "duct-sizing-failed"
+  | "invalid-terminal-airflow"
+  | "invalid-fan"
+  | "missing-length"
+  | "non-positive-available-static";
 export class DuctNetworkError extends Error {
   readonly code: DuctNetworkErrorCode;
   readonly elementRef: string;
@@ -34,7 +44,7 @@ export class DuctNetworkError extends Error {
   }
 }
 export type DuctNetworkFinding = {
-  code: "dangling-reference" | "no-equipment-path" | "mixed-system-segment";
+  code: "dangling-reference" | "no-equipment-path" | "mixed-system-segment" | "friction-rate-out-of-range" | "missing-equivalent-length";
   message: string;
   itemId: string;
   elementRef: string;
@@ -49,14 +59,66 @@ export type DuctSegmentRecommendation = {
   role: DuctRole;
   size: RoundDuctSize;
 };
+/** Blower data that turns a fixed friction rate into one derived from available static pressure. */
+export type FanStatic = {
+  /** External static pressure the blower delivers at design airflow, in. w.g. */
+  externalStaticInWg: number;
+  /** Pressure drops of devices outside the duct runs (coil, filter, registers, grilles, dampers), in. w.g., by name. */
+  componentLossesInWg?: Readonly<Record<string, number>>;
+};
+/** The longest effective run of one system: measured segment lengths plus fitting equivalent lengths. */
+export type EffectivePath = {
+  airflowType: SizedAirflowType;
+  terminalItemId: string;
+  /** Element refs from the terminal to (and excluding) the equipment. */
+  itemRefs: readonly string[];
+  measuredLengthFt: number;
+  equivalentLengthFt: number;
+  effectiveLengthFt: number;
+};
+/** Manual D style design friction rate: FR = available static × 100 / total effective length. */
+export type DesignFrictionRate = {
+  externalStaticInWg: number;
+  componentLossesInWg: number;
+  availableStaticInWg: number;
+  totalEffectiveLengthFt: number;
+  frictionRatePer100ft: number;
+  /** Longest path per system that had terminals; the sum of their effective lengths is the TEL. */
+  paths: readonly EffectivePath[];
+};
 export type DuctNetworkResult = {
   segments: readonly DuctSegmentRecommendation[];
   findings: readonly DuctNetworkFinding[];
+  /** Present when `fan` was given. */
+  design: DesignFrictionRate | null;
 };
 export type DuctNetworkOptions = {
   /** Systems to propagate (default: all of `SIZED_AIRFLOW_TYPES`). */
   airflowTypes?: readonly SizedAirflowType[];
+  /** When given, the friction rate is derived from available static pressure over the total effective length instead of the default fixed rate. */
+  fan?: FanStatic | null;
 };
+
+/** Manual D's acceptable friction-rate range ("the wedge"), in. w.g. per 100 ft. */
+export const FRICTION_RATE_RANGE_PER_100FT = { min: 0.06, max: 0.18 } as const;
+
+const round4 = (value: number): number => Math.round(value * 10000) / 10000;
+
+function validateFan(fan: FanStatic): { externalStaticInWg: number; componentLossesInWg: number } {
+  if (!Number.isFinite(fan.externalStaticInWg) || fan.externalStaticInWg <= 0) {
+    throw new DuctNetworkError("invalid-fan", "fan", `fan.externalStaticInWg must be a positive finite number of in. w.g., got ${fan.externalStaticInWg}.`);
+  }
+  let componentLossesInWg = 0;
+  for (const [name, loss] of Object.entries(fan.componentLossesInWg ?? {})) {
+    if (!Number.isFinite(loss) || loss < 0) throw new DuctNetworkError("invalid-fan", "fan", `fan.componentLossesInWg.${name} must be a finite non-negative number of in. w.g., got ${loss}.`);
+    componentLossesInWg += loss;
+  }
+  const availableStaticInWg = fan.externalStaticInWg - componentLossesInWg;
+  if (availableStaticInWg <= 0) {
+    throw new DuctNetworkError("non-positive-available-static", "fan", `Component losses (${round4(componentLossesInWg)} in. w.g.) consume the external static pressure (${fan.externalStaticInWg} in. w.g.); no pressure is left for the ducts.`);
+  }
+  return { externalStaticInWg: fan.externalStaticInWg, componentLossesInWg };
+}
 
 const isCompatible = (item: NetworkItem, system: SizedAirflowType): boolean => item.airflowType === system || item.airflowType === "unknown";
 
@@ -70,6 +132,7 @@ const isCompatible = (item: NetworkItem, system: SizedAirflowType): boolean => i
  */
 export function recommendDuctSegments(items: readonly NetworkItem[], options: DuctNetworkOptions = {}): DuctNetworkResult {
   const systems = options.airflowTypes ?? SIZED_AIRFLOW_TYPES;
+  const fan = options.fan ? validateFan(options.fan) : null;
   const itemByRef = new Map<string, NetworkItem>();
   const adjacency = new Map<string, Set<string>>();
   const findings: DuctNetworkFinding[] = [];
@@ -90,6 +153,7 @@ export function recommendDuctSegments(items: readonly NetworkItem[], options: Du
   }
   type Load = { item: NetworkSegment; system: SizedAirflowType; cfm: number; terminalItemIds: Set<string> };
   const loads = new Map<string, Map<SizedAirflowType, Load>>();
+  const longestPath = new Map<SizedAirflowType, EffectivePath>();
   const terminals = items
     .filter((item): item is NetworkNode & { kind: "terminal"; airflowType: SizedAirflowType; requiredCfm: number } =>
       item.kind === "terminal" && item.requiredCfm != null && (systems as readonly AirflowType[]).includes(item.airflowType))
@@ -119,6 +183,33 @@ export function recommendDuctSegments(items: readonly NetworkItem[], options: Du
       findings.push({ code: "no-equipment-path", itemId: terminal.id, elementRef: terminal.elementRef, message: `${system} terminal ${terminal.elementRef} has no ${system}-compatible path to equipment.` });
       continue;
     }
+    if (fan !== null) {
+      const path: EffectivePath = { airflowType: system, terminalItemId: terminal.id, itemRefs: [], measuredLengthFt: 0, equivalentLengthFt: 0, effectiveLengthFt: 0 };
+      // `parent` maps each reached item back toward the terminal; walk equipment → terminal and build terminal-first order.
+      const refs: string[] = [terminal.elementRef];
+      for (let ref = parent.get(equipmentRef)!; ref !== terminal.elementRef; ref = parent.get(ref)!) refs.splice(1, 0, ref);
+      for (const ref of refs) {
+        const item = itemByRef.get(ref)!;
+        if (item.kind === "segment") {
+          if (item.lengthFt == null || !Number.isFinite(item.lengthFt) || item.lengthFt < 0) {
+            throw new DuctNetworkError("missing-length", item.elementRef, `${item.elementRef} needs a finite non-negative lengthFt to size from available static pressure.`);
+          }
+          path.measuredLengthFt += item.lengthFt;
+        } else if (item.kind === "fitting" || item.kind === "terminal") {
+          if (item.equivalentLengthFt == null) {
+            if (item.kind === "fitting" && !findings.some((finding) => finding.code === "missing-equivalent-length" && finding.elementRef === item.elementRef)) {
+              findings.push({ code: "missing-equivalent-length", itemId: item.id, elementRef: item.elementRef, message: `${item.elementRef} has no equivalentLengthFt; its loss is counted as zero in the effective length.` });
+            }
+          } else if (!Number.isFinite(item.equivalentLengthFt) || item.equivalentLengthFt < 0) {
+            throw new DuctNetworkError("missing-length", item.elementRef, `${item.elementRef} equivalentLengthFt must be a finite non-negative number of feet.`);
+          } else path.equivalentLengthFt += item.equivalentLengthFt;
+        }
+      }
+      path.itemRefs = refs;
+      path.effectiveLengthFt = path.measuredLengthFt + path.equivalentLengthFt;
+      const current = longestPath.get(system);
+      if (current === undefined || path.effectiveLengthFt > current.effectiveLengthFt) longestPath.set(system, path);
+    }
     for (let ref = equipmentRef; ref !== terminal.elementRef; ref = parent.get(ref)!) {
       const item = itemByRef.get(ref)!;
       if (item.kind !== "segment") continue;
@@ -130,6 +221,22 @@ export function recommendDuctSegments(items: readonly NetworkItem[], options: Du
       loads.set(ref, bySystem);
     }
   }
+  let design: DesignFrictionRate | null = null;
+  if (fan !== null) {
+    const paths = [...longestPath.values()].sort((a, b) => a.airflowType.localeCompare(b.airflowType));
+    const totalEffectiveLengthFt = paths.reduce((sum, path) => sum + path.effectiveLengthFt, 0);
+    if (totalEffectiveLengthFt <= 0) {
+      throw new DuctNetworkError("missing-length", "fan", "Total effective length is zero: give segments lengthFt (and fittings equivalentLengthFt) on at least one terminal-to-equipment path.");
+    }
+    const availableStaticInWg = fan.externalStaticInWg - fan.componentLossesInWg;
+    const frictionRatePer100ft = round4((availableStaticInWg * 100) / totalEffectiveLengthFt);
+    design = { externalStaticInWg: fan.externalStaticInWg, componentLossesInWg: round4(fan.componentLossesInWg), availableStaticInWg: round4(availableStaticInWg), totalEffectiveLengthFt: round4(totalEffectiveLengthFt), frictionRatePer100ft, paths };
+    if (frictionRatePer100ft < FRICTION_RATE_RANGE_PER_100FT.min || frictionRatePer100ft > FRICTION_RATE_RANGE_PER_100FT.max) {
+      const direction = frictionRatePer100ft < FRICTION_RATE_RANGE_PER_100FT.min ? "below" : "above";
+      findings.push({ code: "friction-rate-out-of-range", itemId: "fan", elementRef: "fan", message: `Design friction rate ${frictionRatePer100ft} in. w.g./100 ft is ${direction} the ${FRICTION_RATE_RANGE_PER_100FT.min}–${FRICTION_RATE_RANGE_PER_100FT.max} range; ${direction === "below" ? "runs are long or available static is low: shorten runs, reduce device losses, or pick a stronger blower" : "runs are short: velocity caps will govern sizes"}.` });
+    }
+  }
+  const frictionRatePer100ft = design?.frictionRatePer100ft ?? DEFAULT_FRICTION_RATE_PER_100FT;
   const segments: DuctSegmentRecommendation[] = [];
   for (const [elementRef, bySystem] of [...loads.entries()].sort(([a], [b]) => a.localeCompare(b))) {
     const [load, ...others] = [...bySystem.values()];
@@ -145,17 +252,17 @@ export function recommendDuctSegments(items: readonly NetworkItem[], options: Du
     });
     const role: DuctRole = touchesEquipment ? "main" : terminalItemIds.size === 1 ? "runout" : "branch";
     try {
-      const size = sizeDuctForAirflow({ cfm, role, airflowType: system });
+      const size = sizeDuctForAirflow({ cfm, role, airflowType: system, frictionRatePer100ft });
       segments.push({ itemId: item.id, elementRef, airflowType: system, cfm, terminalItemIds: [...terminalItemIds].sort(), role, size });
     } catch (error) {
       const detail = error instanceof DuctSizingError ? error.message : String(error);
       throw new DuctNetworkError("duct-sizing-failed", elementRef, `Could not size ${system} duct ${elementRef} at ${cfm.toFixed(1)} CFM: ${detail}`);
     }
   }
-  return { segments, findings: findings.sort((a, b) => a.elementRef.localeCompare(b.elementRef) || a.code.localeCompare(b.code)) };
+  return { segments, findings: findings.sort((a, b) => a.elementRef.localeCompare(b.elementRef) || a.code.localeCompare(b.code)), design };
 }
 
 /** Supply-only propagation; see `recommendDuctSegments`. */
-export function recommendSupplyDuctSegments(items: readonly NetworkItem[]): DuctNetworkResult {
-  return recommendDuctSegments(items, { airflowTypes: ["supply"] });
+export function recommendSupplyDuctSegments(items: readonly NetworkItem[], options: Omit<DuctNetworkOptions, "airflowTypes"> = {}): DuctNetworkResult {
+  return recommendDuctSegments(items, { ...options, airflowTypes: ["supply"] });
 }

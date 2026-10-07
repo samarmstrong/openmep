@@ -3,8 +3,8 @@ import {
   DuctNetworkError,
   DuctSizingError,
   NetworkInputError,
-  parseNetworkInput,
-  sizeNetworkInput,
+  parseNetworkDocument,
+  sizeNetworkDocument,
   sizeSingleDuct,
 } from "@openmep/hvac-domain";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -14,15 +14,18 @@ import { z } from "zod";
 
 export const SERVER_NAME = "openmep";
 /** Kept equal to package.json `version` (checked by a test). */
-export const SERVER_VERSION = "0.1.0";
+export const SERVER_VERSION = "0.2.0";
 
 export const SERVER_INSTRUCTIONS = [
   "OpenMEP sizes HVAC ducts deterministically: equal friction at a",
   `${DEFAULT_FRICTION_RATE_PER_100FT} in. w.g./100 ft target with role-based velocity caps per system,`,
   "rounded up to standard round diameters. Existing rect and oval sections are graded by",
   "ASHRAE circular equivalent. Use size_duct for one run and size_duct_network for a connected",
-  "system (terminals, segments, fittings, equipment). Airflow (CFM) is a design input: never",
-  "invent it; ask the user. Results are recommendations for an engineer to review.",
+  "system (terminals, segments, fittings, equipment). Give size_duct_network a fan (external static",
+  "pressure and device losses) plus segment lengthFt and fitting equivalentLengthFt to derive the",
+  "friction rate from available static pressure over the total effective length (Manual D) instead",
+  "of the fixed rate. Airflow (CFM), static pressure, and lengths are design inputs: never invent",
+  "them; ask the user. Results are recommendations for an engineer to review.",
 ].join(" ");
 
 const systemSchema = z.enum(["supply", "return", "exhaust", "outside-air"]);
@@ -46,7 +49,15 @@ const networkItemSchema = z.object({
   connectedItemRefs: z.array(z.string()).optional().describe("elementRefs this item touches; one side of each connection is enough."),
   requiredCfm: z.number().nullable().optional().describe("Terminals only: design airflow in CFM."),
   existing: existingSchema.optional().describe("Segments only: the drawn section, graded against the recommendation."),
+  lengthFt: z.number().nonnegative().optional().describe("Segments only: measured length in feet. Required on sized segments when fan is given."),
+  equivalentLengthFt: z.number().nonnegative().optional().describe("Fittings and terminals: equivalent length of straight duct for the fitting's loss, feet (Manual D style). Counted in effective length when fan is given."),
 });
+const fanSchema = z
+  .object({
+    externalStaticInWg: z.number().positive().describe("Blower external static pressure at design airflow, in. w.g."),
+    componentLossesInWg: z.record(z.string(), z.number().nonnegative()).optional().describe("Device pressure drops outside the duct runs by name (coil, filter, supply-outlet, return-grille, damper), in. w.g."),
+  })
+  .describe("Blower data. When given, friction rate = (externalStatic − Σ componentLosses) × 100 / total effective length (longest supply + longest return effective path).");
 
 function text(value: unknown): CallToolResult {
   return { content: [{ type: "text", text: JSON.stringify(value) }] };
@@ -95,14 +106,20 @@ export function createOpenMepServer(): McpServer {
       description:
         "Size every supply, return, exhaust, and outside-air segment of a connected duct network. Each terminal's requiredCfm " +
         "is carried along its shortest same-system path to equipment and summed per segment; roles (main/branch/runout) are " +
-        "inferred. Returns per-segment recommendations, grades for segments with an existing section, and findings: " +
-        "missing-required-cfm, no-equipment-path, dangling-reference, mixed-system-segment, undersized, oversized.",
-      inputSchema: { items: z.array(networkItemSchema).describe("Every terminal, segment, fitting, and equipment item in the network.") },
+        "inferred. Sizes at the fixed default friction rate, or, when fan is given with segment lengthFt and fitting " +
+        "equivalentLengthFt, at the Manual D friction rate derived from available static pressure over the total effective " +
+        "length (returned as design: ASP, TEL, friction rate, longest paths). Returns per-segment recommendations, grades " +
+        "for segments with an existing section, and findings: missing-required-cfm, no-equipment-path, dangling-reference, " +
+        "mixed-system-segment, undersized, oversized, friction-rate-out-of-range, missing-equivalent-length.",
+      inputSchema: {
+        items: z.array(networkItemSchema).describe("Every terminal, segment, fitting, and equipment item in the network."),
+        fan: fanSchema.optional(),
+      },
       annotations: { title: "Size a duct network", ...readOnly },
     },
-    async ({ items }) => {
+    async ({ items, fan }) => {
       try {
-        return text(sizeNetworkInput(parseNetworkInput({ items })));
+        return text(sizeNetworkDocument(parseNetworkDocument({ items, fan })));
       } catch (error) {
         return toolError(error);
       }

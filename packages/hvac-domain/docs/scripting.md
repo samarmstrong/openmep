@@ -18,14 +18,16 @@ Type declarations ship in `dist/scripting.d.ts`; an editor or `tsc` shows every 
 |---|---|---|
 | `openmep.sizeDuct({ cfm, role?, airflowType?, existing? })` | Size one round duct; grade `existing` if given | `{ input, recommended, existing }` |
 | `openmep.gradeDuct({ cfm, existing, role?, airflowType? })` | Same, with `existing` required | result whose `existing.comparison.status` is `ok` / `undersized` / `oversized` |
-| `openmep.sizeNetwork(doc)` | Validate and size a network document (array, `{ items }`, or typed items) | `{ summary, findings, segments }` |
+| `openmep.sizeNetwork(doc, { fan? })` | Validate and size a network document (array, `{ items, fan? }`, or typed items) | `{ design, summary, findings, segments }` |
 | `openmep.parseNetwork(doc)` | Validate only | `NetworkItemInput[]` |
+| `openmep.parseNetworkDocument(doc)` | Validate items and optional `fan` | `{ items, fan }` |
+| `openmep.frictionRateFromStatic({ externalStaticInWg, componentLossesInWg?, totalEffectiveLengthFt })` | Manual D arithmetic alone | `{ availableStaticInWg, frictionRatePer100ft, inRange }` |
 | `openmep.applySizes(items, result)` | Copy of `items` with each sized segment's `existing` set to the recommended round size | `NetworkItemInput[]` |
 | `openmep.connectPorts(ports, { toleranceM? })` | Rebuild `connectedItemRefs` from port positions in one metric frame | `Map<itemRef, itemRef[]>` |
 | `openmep.equivalentDiameterIn(section)` | ASHRAE circular equivalent of a round, rect, or oval section | inches |
 | `openmep.velocityFpm(cfm, diameterIn)`, `openmep.frictionRatePer100ft(cfm, diameterIn)` | Air velocity and friction rate through a round duct | fpm, in. w.g./100 ft |
 | `openmep.maxVelocityFpm(airflowType, role)` | Recommended velocity cap | fpm |
-| `openmep.constants` | `frictionRatePer100ft` (0.08), `standardRoundDiametersIn`, `airflowTypes`, `roles` | |
+| `openmep.constants` | `frictionRatePer100ft` (0.08), `frictionRateRangePer100ft` (0.06–0.18), `standardRoundDiametersIn`, `airflowTypes`, `roles` | |
 | `openmep.errors`, `openmep.isEngineError(e)` | Typed error classes with a stable `code`; the guard separates engine errors from bugs | |
 
 Defaults: `role` `main`, `airflowType` `supply`. Roles: `main` touches equipment,
@@ -46,11 +48,14 @@ compatible with every system (typical for equipment).
 
 `connectedItemRefs` is undirected; listing a connection on one side is enough.
 `existing` is optional on segments: `{ shape: "round", diameterIn }` or
-`{ shape: "rect" | "oval", widthIn, heightIn }`.
+`{ shape: "rect" | "oval", widthIn, heightIn }`. For fan-driven sizing, segments
+carry `lengthFt` and fittings or terminals carry `equivalentLengthFt`; the document
+carries `fan: { externalStaticInWg, componentLossesInWg? }`.
 
 Finding codes from `sizeNetwork`: `missing-required-cfm` (error for supply, warning
 otherwise), `no-equipment-path`, `dangling-reference`, `mixed-system-segment`
-(errors), `undersized` (error), `oversized` (info).
+(errors), `undersized` (error), `oversized` (info), `friction-rate-out-of-range` and
+`missing-equivalent-length` (warnings, fan mode only).
 
 ## Example 1: size a multi-room supply and return system
 
@@ -105,6 +110,32 @@ console.log(`resized ${before.segments.filter((s) => s.existing?.comparison.stat
 
 Patch only what the engine sized; segments with `no-equipment-path` keep their
 drawn size and should be reported, not guessed.
+
+## Example 4: size from the blower's static pressure (Manual D)
+
+```js
+import { openmep } from "@openmep/hvac-domain/scripting";
+
+const fan = { externalStaticInWg: 0.5, componentLossesInWg: { coil: 0.2, filter: 0.1, "supply-register": 0.03, "return-grille": 0.03 } };
+const items = [
+  { id: "ahu", elementRef: "ahu", kind: "equipment" },
+  { id: "trunk", elementRef: "trunk", kind: "segment", airflowType: "supply", connectedItemRefs: ["ahu", "tee"], lengthFt: 20 },
+  { id: "tee", elementRef: "tee", kind: "fitting", airflowType: "supply", equivalentLengthFt: 20 },
+  { id: "run-a", elementRef: "run-a", kind: "segment", airflowType: "supply", connectedItemRefs: ["tee", "reg-a"], lengthFt: 35 },
+  { id: "reg-a", elementRef: "reg-a", kind: "terminal", airflowType: "supply", requiredCfm: 150, equivalentLengthFt: 35 },
+  { id: "ret", elementRef: "ret", kind: "segment", airflowType: "return", connectedItemRefs: ["ahu", "grille"], lengthFt: 15 },
+  { id: "grille", elementRef: "grille", kind: "terminal", airflowType: "return", requiredCfm: 150, equivalentLengthFt: 10 },
+];
+const { design, segments, findings } = openmep.sizeNetwork({ items, fan });
+console.log(`ASP ${design.availableStaticInWg} in, TEL ${design.totalEffectiveLengthFt} ft, FR ${design.frictionRatePer100ft} in/100 ft`);
+for (const p of design.paths) console.log(`${p.airflowType} governing path: ${p.itemRefs.join(" → ")} = ${p.effectiveLengthFt} ft`);
+for (const s of segments) console.log(`${s.elementRef}: ${s.cfm} CFM → ${s.recommended.standardDiameterIn} in (${s.recommended.governingConstraint})`);
+console.log(findings.map((f) => f.message));
+```
+
+Without `fan` the engine uses the fixed default rate. Static pressure, device
+losses, and lengths are design inputs: take them from the blower table, the
+device data, and the drawing, never from guesses.
 
 ## Errors
 

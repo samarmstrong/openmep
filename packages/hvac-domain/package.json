@@ -1,6 +1,6 @@
 {
   "name": "@openmep/hvac-domain",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Deterministic round-duct sizing and supply/return/exhaust network propagation, as a library and a host-free CLI (openmep-hvac).",
   "license": "MIT",
   "type": "module",

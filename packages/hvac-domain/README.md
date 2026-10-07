@@ -41,6 +41,26 @@ wrapper. `recommendDuctSegments` returns sorted arrays suitable for JSON
 serialization; `recommendSupplyDuctSegments` restricts it to supply.
 `sizeSingleDuct` and `sizeNetworkInput` are the CLI's two commands as functions.
 
+## Sizing from fan static pressure (Manual D friction rate)
+
+Give the document a `fan` and the engine derives the friction rate the way ACCA
+Manual D does instead of using the fixed 0.08 in. w.g./100 ft:
+
+```jsonc
+{ "fan": { "externalStaticInWg": 0.70,
+           "componentLossesInWg": { "dx-coil": 0.23, "filter": 0.18, "supply-outlet": 0.03, "return-grille": 0.03, "balancing-damper": 0.03 } },
+  "items": [ /* segments with lengthFt, fittings/terminals with equivalentLengthFt */ ] }
+```
+
+Available static = external static − Σ device losses; total effective length =
+longest supply path + longest return path (measured `lengthFt` plus fitting
+`equivalentLengthFt`); FR = ASP × 100 / TEL. `result.design` reports each term
+and the governing paths; `friction-rate-out-of-range` warns when FR leaves
+Manual D's 0.06–0.18 window. `examples/acca-manual-d-worksheet.network.json`
+reproduces the published ACCA worksheet (ESP 0.70, losses 0.50, TEL 200 ft,
+FR 0.10). Equivalent lengths come from the designer or Manual D's fitting
+tables; the engine does not ship a fitting catalogue.
+
 ## Scripting surface
 
 For agents and scripts, one namespace covers the engine with stable names:

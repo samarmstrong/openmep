@@ -11,6 +11,8 @@ export type PascalFindingCode =
   | "no-equipment-path"
   | "mixed-system-segment"
   | "dangling-reference"
+  | "friction-rate-out-of-range"
+  | "missing-equivalent-length"
   | "detached-node"
   | "unsized-segment"
   | "undersized"
@@ -109,7 +111,7 @@ export function buildPascalNetwork(scene: PascalScene, options: BuildNetworkOpti
     const connectedItemRefs = connections.get(node.id) ?? [];
     switch (node.type) {
       case "duct-segment":
-        items.push({ id: node.id, elementRef: node.id, kind: "segment", airflowType: node.system, connectedItemRefs });
+        items.push({ id: node.id, elementRef: node.id, kind: "segment", airflowType: node.system, connectedItemRefs, lengthFt: pathLengthFt(node.path) });
         break;
       case "duct-fitting":
         items.push({ id: node.id, elementRef: node.id, kind: "fitting", airflowType: node.system, connectedItemRefs });
@@ -166,4 +168,16 @@ export function buildPascalNetwork(scene: PascalScene, options: BuildNetworkOpti
     });
   }
   return { items, ports, connections, findings };
+}
+
+const FEET_PER_METRE = 3.280839895;
+/** Polyline length of a Pascal duct path (level-local metres) in feet, rounded to 0.01 ft, so the engine can derive a Manual D friction rate from the scene. */
+export function pathLengthFt(path: readonly (readonly [number, number, number])[]): number {
+  let metres = 0;
+  for (let i = 1; i < path.length; i++) {
+    const [ax, ay, az] = path[i - 1]!;
+    const [bx, by, bz] = path[i]!;
+    metres += Math.hypot(bx - ax, by - ay, bz - az);
+  }
+  return Math.round(metres * FEET_PER_METRE * 100) / 100;
 }

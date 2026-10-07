@@ -1,6 +1,27 @@
 # Changelog
 
-## 0.5.0 - 2026-10-07
+## 0.6.0 - 2026-10-07
+
+- **Available-static-pressure sizing (Manual D friction rate).** A network document may carry
+  `fan: { externalStaticInWg, componentLossesInWg? }`; segments may carry `lengthFt` and fittings or
+  terminals `equivalentLengthFt`. The engine finds the longest effective supply and return paths
+  (measured length + fitting equivalent lengths), derives FR = (ESP − Σ device losses) × 100 / TEL,
+  sizes every segment at that rate (velocity caps still apply), and reports `design` (ASP, TEL,
+  friction rate, the paths). Without `fan`, output is unchanged (fixed 0.08 in. w.g./100 ft).
+  Verified against the ACCA Manual D friction-rate worksheet example (ESP 0.70, losses 0.50, TEL 200,
+  FR 0.10): exact match on the rate; every branch within one standard size of the brochure's flex
+  selections (`examples/acca-manual-d-worksheet.network.json`).
+- New findings: `friction-rate-out-of-range` (warning; outside Manual D's 0.06–0.18) and
+  `missing-equivalent-length` (warning; fitting counted as zero). New typed errors: `invalid-fan`,
+  `missing-length`, `non-positive-available-static`.
+- Library: `parseNetworkDocument`, `readNetworkDocument`, `sizeNetworkDocument`,
+  `sizeNetworkInput(items, { fan })`, `recommendDuctSegments(items, { fan })`,
+  `FRICTION_RATE_RANGE_PER_100FT`; `openmep.sizeNetwork(doc, { fan? })`,
+  `openmep.parseNetworkDocument`, `openmep.frictionRateFromStatic`,
+  `openmep.constants.frictionRateRangePer100ft`. `NetworkSizingResult` gains `design` and
+  `summary.frictionRatePer100ft`.
+
+## 0.5.0 - 2026-10-07 (not published; folded into 0.6.0)
 
 - Scripting surface: `import { openmep } from "@openmep/hvac-domain/scripting"` (also exported from the
   root) exposes stable names over the existing engine: `sizeDuct`, `gradeDuct`, `sizeNetwork` (accepts raw
