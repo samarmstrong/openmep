@@ -96,7 +96,8 @@ export function sizePascalNetwork(scene: PascalScene, network: PascalNetwork, op
   const findings: PascalFinding[] = [...network.findings];
   const result = recommendDuctSegments(network.items, { airflowTypes: ["supply", "return"] });
   for (const finding of result.findings) {
-    findings.push({ code: finding.code, severity: "error", nodeId: finding.elementRef, message: finding.message });
+    const severity = finding.code === "friction-rate-out-of-range" || finding.code === "missing-equivalent-length" ? "warning" : "error";
+    findings.push({ code: finding.code, severity, nodeId: finding.elementRef, message: finding.message });
   }
   const segments: PascalSegmentSizing[] = [];
   const patches: PascalUpdatePatch[] = [];

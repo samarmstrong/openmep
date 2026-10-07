@@ -1,15 +1,19 @@
 import {
   NetworkInputError,
+  parseNetworkDocument,
   parseNetworkInput,
+  sizeNetworkDocument,
   sizeNetworkInput,
   sizeSingleDuct,
   type ExistingSection,
+  type NetworkDocument,
   type NetworkItemInput,
+  type NetworkSizingOptions,
   type NetworkSizingResult,
   type SingleDuctInput,
   type SingleDuctResult,
 } from "./cli.js";
-import { DuctNetworkError, SIZED_AIRFLOW_TYPES, type SizedAirflowType } from "./duct-network.js";
+import { DuctNetworkError, FRICTION_RATE_RANGE_PER_100FT, SIZED_AIRFLOW_TYPES, type FanStatic, type SizedAirflowType } from "./duct-network.js";
 import { flatOvalEquivalentDiameterIn, rectangularEquivalentDiameterIn } from "./equivalent-diameter.js";
 import { PortGraphError, connectCoincidentPorts, type PortGraphOptions, type PortRef } from "./port-graph.js";
 import {
@@ -23,7 +27,7 @@ import {
 } from "./round-duct.js";
 
 /** Kept equal to package.json `version` (checked by a test). */
-export const OPENMEP_VERSION = "0.5.0";
+export const OPENMEP_VERSION = "0.6.0";
 
 /** Any error the engine raises on bad input or an unsizeable duct. All carry a stable `code`. */
 export type EngineError = DuctSizingError | DuctNetworkError | NetworkInputError | PortGraphError;
@@ -78,17 +82,40 @@ export const openmep = {
   },
 
   /**
-   * Validate and size a network document: a JSON array of items, `{ items }`,
-   * or an already-typed `NetworkItemInput[]`. Propagates terminal CFM to
-   * equipment per system and grades segments that describe `existing`.
+   * Validate and size a network document: a JSON array of items,
+   * `{ items, fan? }`, or an already-typed `NetworkItemInput[]`. Propagates
+   * terminal CFM to equipment per system and grades segments that describe
+   * `existing`. With `fan` (in the document or in `options`), the friction
+   * rate is derived from available static pressure over the total effective
+   * length, Manual D style; otherwise the fixed default rate is used.
    */
-  sizeNetwork(input: unknown): NetworkSizingResult {
-    return sizeNetworkInput(parseNetworkInput(input));
+  sizeNetwork(input: unknown, options: NetworkSizingOptions = {}): NetworkSizingResult {
+    const document = parseNetworkDocument(input);
+    return sizeNetworkDocument({ items: document.items, fan: options.fan === undefined ? document.fan : options.fan });
   },
 
-  /** Validate a network document without sizing it. Throws `NetworkInputError` with a JSON path. */
+  /** Validate a network document's items without sizing. Throws `NetworkInputError` with a JSON path. */
   parseNetwork(input: unknown): NetworkItemInput[] {
     return parseNetworkInput(input);
+  },
+
+  /** Validate a network document (`{ items, fan? }` or an array) without sizing. */
+  parseNetworkDocument(input: unknown): NetworkDocument {
+    return parseNetworkDocument(input);
+  },
+
+  /**
+   * Manual D friction-rate arithmetic on its own: available static = external
+   * static − Σ component losses; FR = available static × 100 / TEL.
+   */
+  frictionRateFromStatic(input: FanStatic & { totalEffectiveLengthFt: number }): { availableStaticInWg: number; frictionRatePer100ft: number; inRange: boolean } {
+    const losses = Object.values(input.componentLossesInWg ?? {}).reduce((sum, loss) => sum + loss, 0);
+    const availableStaticInWg = input.externalStaticInWg - losses;
+    if (!(availableStaticInWg > 0)) throw new DuctNetworkError("non-positive-available-static", "fan", `Component losses (${losses}) consume the external static pressure (${input.externalStaticInWg}).`);
+    if (!(input.totalEffectiveLengthFt > 0)) throw new DuctNetworkError("missing-length", "fan", "totalEffectiveLengthFt must be positive.");
+    const round4 = (value: number): number => Math.round(value * 10000) / 10000;
+    const frictionRatePer100ft = round4((availableStaticInWg * 100) / input.totalEffectiveLengthFt);
+    return { availableStaticInWg: round4(availableStaticInWg), frictionRatePer100ft, inRange: frictionRatePer100ft >= FRICTION_RATE_RANGE_PER_100FT.min && frictionRatePer100ft <= FRICTION_RATE_RANGE_PER_100FT.max };
   },
 
   applySizes,
@@ -122,6 +149,7 @@ export const openmep = {
 
   constants: {
     frictionRatePer100ft: DEFAULT_FRICTION_RATE_PER_100FT,
+    frictionRateRangePer100ft: FRICTION_RATE_RANGE_PER_100FT,
     standardRoundDiametersIn: STANDARD_ROUND_DIAMETERS_IN,
     airflowTypes: SIZED_AIRFLOW_TYPES,
     roles: ["main", "branch", "runout"] as const satisfies readonly DuctRole[],

@@ -21,13 +21,17 @@ export type {
 
 export {
   DuctNetworkError,
+  FRICTION_RATE_RANGE_PER_100FT,
   SIZED_AIRFLOW_TYPES,
   recommendDuctSegments,
   recommendSupplyDuctSegments,
 } from "./duct-network.js";
 export type {
+  DesignFrictionRate,
   DuctNetworkErrorCode,
   DuctNetworkFinding,
+  EffectivePath,
+  FanStatic,
   NetworkItem,
   NetworkNode,
   DuctNetworkOptions,
@@ -56,9 +60,11 @@ export type {
   RoundDuctSizeComparisonInput,
 } from "./size-comparison.js";
 
-export { NetworkInputError, parseNetworkInput, readNetworkInput, sizeNetworkInput, sizeSingleDuct } from "./cli.js";
+export { NetworkInputError, parseNetworkDocument, parseNetworkInput, readNetworkDocument, readNetworkInput, sizeNetworkDocument, sizeNetworkInput, sizeSingleDuct } from "./cli.js";
 export type {
   ExistingSection,
+  NetworkDocument,
+  NetworkSizingOptions,
   NetworkFinding,
   NetworkFindingCode,
   NetworkInputErrorCode,

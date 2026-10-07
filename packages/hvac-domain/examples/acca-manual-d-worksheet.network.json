@@ -1,0 +1,417 @@
+{
+ "$comment": "ACCA Manual D friction-rate worksheet example (ACCA brochure, hosted at ahrinet.org/sites/default/files/2022-10/manual%20D%20calculation.pdf): ESP 0.70 at 1200 CFM; coil 0.23, filter 0.18, supply outlet 0.03, return grille 0.03, balancing damper 0.03 = 0.50; ASP 0.20; TEL 200 ft; FR 0.10. Room CFM and the brochure sizes (flex duct) are in the test. Lengths and equivalent lengths here are illustrative choices that reproduce the TEL; the brochure gives only the totals.",
+ "fan": {
+  "externalStaticInWg": 0.7,
+  "componentLossesInWg": {
+   "dx-coil": 0.23,
+   "filter": 0.18,
+   "supply-outlet": 0.03,
+   "return-grille": 0.03,
+   "balancing-damper": 0.03
+  }
+ },
+ "items": [
+  {
+   "id": "furnace",
+   "elementRef": "furnace",
+   "kind": "equipment"
+  },
+  {
+   "id": "supply-trunk",
+   "elementRef": "supply-trunk",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "furnace",
+    "supply-tee"
+   ],
+   "lengthFt": 25
+  },
+  {
+   "id": "supply-tee",
+   "elementRef": "supply-tee",
+   "kind": "fitting",
+   "airflowType": "supply",
+   "equivalentLengthFt": 20
+  },
+  {
+   "id": "return-trunk",
+   "elementRef": "return-trunk",
+   "kind": "segment",
+   "airflowType": "return",
+   "connectedItemRefs": [
+    "furnace",
+    "return-tee"
+   ],
+   "lengthFt": 20
+  },
+  {
+   "id": "return-tee",
+   "elementRef": "return-tee",
+   "kind": "fitting",
+   "airflowType": "return",
+   "equivalentLengthFt": 30
+  },
+  {
+   "id": "run-bed1",
+   "elementRef": "run-bed1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bed1"
+   ],
+   "lengthFt": 30
+  },
+  {
+   "id": "reg-bed1",
+   "elementRef": "reg-bed1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 150,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-closet",
+   "elementRef": "run-closet",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-closet"
+   ],
+   "lengthFt": 10
+  },
+  {
+   "id": "reg-closet",
+   "elementRef": "reg-closet",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 15,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-bed2-1",
+   "elementRef": "run-bed2-1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bed2-1"
+   ],
+   "lengthFt": 25
+  },
+  {
+   "id": "reg-bed2-1",
+   "elementRef": "reg-bed2-1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 50,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-bed2-2",
+   "elementRef": "run-bed2-2",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bed2-2"
+   ],
+   "lengthFt": 25
+  },
+  {
+   "id": "reg-bed2-2",
+   "elementRef": "reg-bed2-2",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 50,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-bed3",
+   "elementRef": "run-bed3",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bed3"
+   ],
+   "lengthFt": 40
+  },
+  {
+   "id": "reg-bed3",
+   "elementRef": "reg-bed3",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 100,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-living-1",
+   "elementRef": "run-living-1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-living-1"
+   ],
+   "lengthFt": 20
+  },
+  {
+   "id": "reg-living-1",
+   "elementRef": "reg-living-1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 137.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-living-2",
+   "elementRef": "run-living-2",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-living-2"
+   ],
+   "lengthFt": 20
+  },
+  {
+   "id": "reg-living-2",
+   "elementRef": "reg-living-2",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 137.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-den",
+   "elementRef": "run-den",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-den"
+   ],
+   "lengthFt": 30
+  },
+  {
+   "id": "reg-den",
+   "elementRef": "reg-den",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 125,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-dining-1",
+   "elementRef": "run-dining-1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-dining-1"
+   ],
+   "lengthFt": 15
+  },
+  {
+   "id": "reg-dining-1",
+   "elementRef": "reg-dining-1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 62.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-dining-2",
+   "elementRef": "run-dining-2",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-dining-2"
+   ],
+   "lengthFt": 15
+  },
+  {
+   "id": "reg-dining-2",
+   "elementRef": "reg-dining-2",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 62.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-foyer",
+   "elementRef": "run-foyer",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-foyer"
+   ],
+   "lengthFt": 12
+  },
+  {
+   "id": "reg-foyer",
+   "elementRef": "reg-foyer",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 80,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-kitchen-1",
+   "elementRef": "run-kitchen-1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-kitchen-1"
+   ],
+   "lengthFt": 18
+  },
+  {
+   "id": "reg-kitchen-1",
+   "elementRef": "reg-kitchen-1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 62.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-kitchen-2",
+   "elementRef": "run-kitchen-2",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-kitchen-2"
+   ],
+   "lengthFt": 18
+  },
+  {
+   "id": "reg-kitchen-2",
+   "elementRef": "reg-kitchen-2",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 62.5,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-bath1",
+   "elementRef": "run-bath1",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bath1"
+   ],
+   "lengthFt": 22
+  },
+  {
+   "id": "reg-bath1",
+   "elementRef": "reg-bath1",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 65,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "run-bath2",
+   "elementRef": "run-bath2",
+   "kind": "segment",
+   "airflowType": "supply",
+   "connectedItemRefs": [
+    "supply-tee",
+    "reg-bath2"
+   ],
+   "lengthFt": 14
+  },
+  {
+   "id": "reg-bath2",
+   "elementRef": "reg-bath2",
+   "kind": "terminal",
+   "airflowType": "supply",
+   "requiredCfm": 40,
+   "equivalentLengthFt": 35
+  },
+  {
+   "id": "ret-bed1",
+   "elementRef": "ret-bed1",
+   "kind": "segment",
+   "airflowType": "return",
+   "connectedItemRefs": [
+    "return-tee",
+    "grille-bed1"
+   ],
+   "lengthFt": 20
+  },
+  {
+   "id": "grille-bed1",
+   "elementRef": "grille-bed1",
+   "kind": "terminal",
+   "airflowType": "return",
+   "requiredCfm": 150,
+   "equivalentLengthFt": 10
+  },
+  {
+   "id": "ret-bed2",
+   "elementRef": "ret-bed2",
+   "kind": "segment",
+   "airflowType": "return",
+   "connectedItemRefs": [
+    "return-tee",
+    "grille-bed2"
+   ],
+   "lengthFt": 15
+  },
+  {
+   "id": "grille-bed2",
+   "elementRef": "grille-bed2",
+   "kind": "terminal",
+   "airflowType": "return",
+   "requiredCfm": 100,
+   "equivalentLengthFt": 10
+  },
+  {
+   "id": "ret-bed3",
+   "elementRef": "ret-bed3",
+   "kind": "segment",
+   "airflowType": "return",
+   "connectedItemRefs": [
+    "return-tee",
+    "grille-bed3"
+   ],
+   "lengthFt": 18
+  },
+  {
+   "id": "grille-bed3",
+   "elementRef": "grille-bed3",
+   "kind": "terminal",
+   "airflowType": "return",
+   "requiredCfm": 100,
+   "equivalentLengthFt": 10
+  },
+  {
+   "id": "ret-living",
+   "elementRef": "ret-living",
+   "kind": "segment",
+   "airflowType": "return",
+   "connectedItemRefs": [
+    "return-tee",
+    "grille-living"
+   ],
+   "lengthFt": 12
+  },
+  {
+   "id": "grille-living",
+   "elementRef": "grille-living",
+   "kind": "terminal",
+   "airflowType": "return",
+   "requiredCfm": 275,
+   "equivalentLengthFt": 10
+  }
+ ]
+}

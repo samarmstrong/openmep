@@ -20,7 +20,7 @@ Requires Node.js 24+. Transport: stdio.
 | Tool | Input | Returns |
 |---|---|---|
 | `size_duct` | `cfm`, optional `role` (`main`/`branch`/`runout`), `airflowType` (`supply`/`return`/`exhaust`/`outside-air`), `existing` section (`{diameterIn}` or `{shape: rect\|oval, widthIn, heightIn}`) | Recommended standard round diameter, velocity, friction; for an existing section its circular equivalent and `ok`/`undersized`/`oversized` |
-| `size_duct_network` | `items`: terminals with `requiredCfm`, segments (optionally with `existing`), fittings, equipment, linked by `connectedItemRefs` | Every loaded segment's CFM, role, recommendation, and grade; findings for missing CFM, disconnected terminals, dangling references, mixed systems, undersized and oversized runs |
+| `size_duct_network` | `items`: terminals with `requiredCfm`, segments (optionally with `existing` and `lengthFt`), fittings (optionally `equivalentLengthFt`), equipment, linked by `connectedItemRefs`; optional `fan` (`externalStaticInWg`, `componentLossesInWg`) | Every loaded segment's CFM, role, recommendation, and grade; with `fan`, the Manual D `design` (available static, total effective length, friction rate, governing paths); findings for missing CFM, disconnected terminals, dangling references, mixed systems, undersized and oversized runs, friction rate outside 0.06–0.18 |
 
 Both tools are read-only and idempotent. Invalid input comes back as a tool
 error naming the field (`NetworkInputError [invalid-item]: items[2].requiredCfm: ...`)
@@ -38,7 +38,8 @@ and 8 in runouts, an 11 in trunk, and a return drop just under size at 10 in.
 
 ## Engineering basis and limits
 
-Equal friction at 0.08 in. w.g./100 ft with role-based velocity caps per system,
+Equal friction at 0.08 in. w.g./100 ft, or at the Manual D rate derived from the blower's
+available static pressure when `fan` and lengths are given, with role-based velocity caps per system,
 rounded up to standard round diameters; see
 [`@openmep/hvac-domain`](../hvac-domain#engineering-basis) for the formula,
 sources, and what is excluded (fitting losses, static pressure summation, fan

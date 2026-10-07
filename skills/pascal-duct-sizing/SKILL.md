@@ -6,7 +6,7 @@ metadata:
   version: "0.3.0"
   source-reviewed: "2026-09-22"
   pascal-verified: "1.0.0 (@pascal-app/cli), pascal-mcp-server 1.0.0; also 0.1.5"
-  engine: "@openmep/pascal-adapter 0.3.0, @openmep/hvac-domain 0.3.0"
+  engine: "@openmep/pascal-adapter 0.5.0, @openmep/hvac-domain 0.6.0"
 ---
 
 # Pascal duct sizing

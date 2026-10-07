@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { SERVER_VERSION, createOpenMepServer } from "./server.js";
 
 const exampleText = readFileSync(new URL("../../hvac-domain/examples/furnace-two-registers.items.json", import.meta.url), "utf8");
+const worksheet = JSON.parse(readFileSync(new URL("../../hvac-domain/examples/acca-manual-d-worksheet.network.json", import.meta.url), "utf8")) as { items: unknown[]; fan: unknown };
 
 async function connect(): Promise<Client> {
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -61,5 +62,14 @@ describe("openmep MCP server", () => {
     const oversize = await call(client, "size_duct", { cfm: 500_000 });
     expect(oversize.isError).toBe(true);
     expect((oversize.content[0] as { text: string }).text).toMatch(/DuctSizingError \[diameter-exceeds-standard-range\]/);
+  });
+  it("size_duct_network derives the Manual D friction rate when fan is given", async () => {
+    const client = await connect();
+    const result = await call(client, "size_duct_network", { items: worksheet.items, fan: worksheet.fan });
+    expect(result.isError).toBeFalsy();
+    expect(body(result)).toMatchObject({ design: { availableStaticInWg: 0.2, totalEffectiveLengthFt: 200, frictionRatePer100ft: 0.1 }, summary: { frictionRatePer100ft: 0.1 } });
+    const starved = await call(client, "size_duct_network", { items: worksheet.items, fan: { externalStaticInWg: 0.3, componentLossesInWg: { coil: 0.3 } } });
+    expect(starved.isError).toBe(true);
+    expect((starved.content[0] as { text: string }).text).toMatch(/non-positive-available-static/);
   });
 });
