@@ -58,6 +58,18 @@ terminals with no airflow or no path to equipment. Any host that can produce thi
 document gets the same engine; `openmep-pascal items` produces it from a Pascal
 scene.
 
+### Check a Manual D worksheet
+
+```sh
+cd examples/manual-d-demo && npm install && node demo.mjs
+```
+
+Takes blower external static, device losses, and one line per run (CFM,
+length, fitting equivalent length) and prints available static, total effective
+length, the Manual D friction rate, and a round size per run, graded against the
+size you already have. Ships with the ACCA worksheet example; see
+`examples/manual-d-demo/README.md` for what it does and does not do.
+
 ### Try airflow design
 
 Change a room's supply airflow, preview the connected duct sizes on the plan,
