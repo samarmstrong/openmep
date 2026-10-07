@@ -69,3 +69,6 @@ export type {
   SingleDuctInput,
   SingleDuctResult,
 } from "./cli.js";
+
+export { OPENMEP_VERSION, applySizes, isEngineError, openmep } from "./scripting.js";
+export type { EngineError, GradeDuctInput, GradeDuctResult, OpenMep } from "./scripting.js";

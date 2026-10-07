@@ -41,6 +41,19 @@ wrapper. `recommendDuctSegments` returns sorted arrays suitable for JSON
 serialization; `recommendSupplyDuctSegments` restricts it to supply.
 `sizeSingleDuct` and `sizeNetworkInput` are the CLI's two commands as functions.
 
+## Scripting surface
+
+For agents and scripts, one namespace covers the engine with stable names:
+
+```ts
+import { openmep } from "@openmep/hvac-domain/scripting";
+const result = openmep.sizeNetwork(JSON.parse(text));   // validate + size + grade
+const patched = openmep.applySizes(openmep.parseNetwork(doc), result);
+```
+
+See [`docs/scripting.md`](./docs/scripting.md) for the API table and three complete
+example scripts, and the `openmep-engine` skill in the repository's `skills/` directory.
+
 ## Engineering basis
 
 The round-duct relation is `Δp = 0.109136·Q^1.9/D^5.02`, with pressure drop in

@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@openmep/hvac-domain": "0.4.0"
+    "@openmep/hvac-domain": "0.5.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
