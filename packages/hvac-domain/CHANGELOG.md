@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0 - 2026-10-07
+
+- Scripting surface: `import { openmep } from "@openmep/hvac-domain/scripting"` (also exported from the
+  root) exposes stable names over the existing engine: `sizeDuct`, `gradeDuct`, `sizeNetwork` (accepts raw
+  JSON), `parseNetwork`, `applySizes`, `connectPorts`, `equivalentDiameterIn`, `velocityFpm`,
+  `frictionRatePer100ft`, `maxVelocityFpm`, `constants`, `errors`, `isEngineError`, `version`.
+  `docs/scripting.md` documents the API with three complete scripts. No engine math changed.
+- New `openmep-engine` agent skill (repo `skills/`) teaches an agent with a shell to write and run a
+  script against the namespace instead of calling one tool per duct.
+
 ## 0.4.0 - 2026-09-22
 
 - Network sizing covers every classified system: `recommendDuctSegments(items, { airflowTypes? })`
